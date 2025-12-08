@@ -37433,15 +37433,15 @@ function verifyFields(fields) {
   var verificationErrors = [];
 
   if (fields[0].length === 0) {
-    verificationErrors.push('Cart Is Empty - https://mesinkasironline.web.app');
+    verificationErrors.push('Cart Is Empty');
   }
 
   if (fields[1] === '') {
-    verificationErrors.push('Select your customer - https://mesinkasironline.web.app');
+    verificationErrors.push('Select your customer');
   }
 
   if (fields[2] == 0) {
-    verificationErrors.push('Select product and create transaction - https://mesinkasironline.web.app');
+    verificationErrors.push('Select product and create transaction');
   }
 
   return verificationErrors;
@@ -37496,7 +37496,7 @@ function storeSale(e) {
     xhr.onload = function () {
       //Created
       if (this.status === 201) {
-        showRequestsMessages('Success create - https://mesinkasironline.web.app', 'success');
+        showRequestsMessages('Success create', 'success');
         resetCart();
         createSaleForm.reset();
         location.reload();
@@ -37508,17 +37508,17 @@ function storeSale(e) {
         var errors = response.errors;
 
         if (errors.rfc) {
-          showRequestsMessages('Select customer and continues - https://mesinkasironline.web.app', 'danger');
+          showRequestsMessages('Select customer and continues', 'danger');
         }
 
         if (errors.total) {
-          showRequestsMessages('Price is null , https://mesinkasironline.web.app' + ' product', 'danger');
+          showRequestsMessages('Price is null' + ' product', 'danger');
         }
       } //Server errors
 
 
       if (this.status === 500) {
-        showRequestsMessages('incomplete order - https://mesinkasironline.web.app' + ' warning', 'warning');
+        showRequestsMessages('incomplete order' + ' warning', 'warning');
       }
     }; //Send the information
 

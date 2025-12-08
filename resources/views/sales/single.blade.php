@@ -26,7 +26,7 @@
             <div class="invoice p-3 mb-3">
                 <div class="row">
                     <div class="col-12">
-                        <h4> Z-Invoice <small class="float-right">Date: {{ date_format($sale->created_at, 'd-M-Y') }}</small> <br /> <small>https://mesinkasironline.web.app</small></h4>
+                        <h4> Z-Invoice <small class="float-right">Date: {{ date_format($sale->created_at, 'd-M-Y') }}</small></h4>
                         <hr>
                     </div>
                 </div>
