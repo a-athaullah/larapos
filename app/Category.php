@@ -9,7 +9,7 @@ class Category extends Model
     protected $primaryKey = 'category_id';
 
     protected $fillable = [
-        'name'
+        'name', 'store_id'
     ];
 
     //This model groups 1 or N products

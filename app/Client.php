@@ -10,7 +10,7 @@ class Client extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'rfc', 'name', 'email', 'phone', 'address'
+        'rfc', 'name', 'email', 'phone', 'address', 'store_id'
     ];
 
     // This model can generate 1 or N sales

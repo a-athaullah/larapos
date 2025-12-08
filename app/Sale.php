@@ -13,7 +13,7 @@ class Sale extends Model
     public $incrementing = true;
 
     protected $fillable = [
-        'total', 'rfc', 'id', 'created'
+        'total', 'store_id', 'id', 'created'
     ];
 
 
