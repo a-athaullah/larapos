@@ -21,6 +21,7 @@ class CreateCartsTable extends Migration
             $table->foreign('sale_id')->references('sale_id')->on('sales')
                 ->onDelete('cascade');
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
+            $table->unsignedBigInteger('store_id')->default(1);
             $table->timestamps();
             $table->date('created')->nullable();
             $table->engine = 'InnoDB';

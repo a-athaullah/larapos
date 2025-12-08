@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('store_id')->default(1);
             $table->boolean('administrator')->default(false);
             $table->rememberToken();
             $table->timestamps();

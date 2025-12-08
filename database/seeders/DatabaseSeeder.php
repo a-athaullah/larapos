@@ -16,10 +16,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+        DB::table('stores')->insert([
+            'name' => 'first store',
+            'description' => 'first merchant',
+        ]);
         DB::table('users')->insert([
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('12345678'),
+            'store_id' => 1,
         ]);
+        
     }
 }
