@@ -17,13 +17,11 @@ class CreateSalesTable extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id('sale_id');
             $table->unsignedFloat('total');
-            $table->string('rfc');
             $table->unsignedBigInteger('id');
             $table->unsignedBigInteger('store_id')->default(1);
             $table->timestamps();
             $table->date('created')->nullable();
             $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('rfc')->references('rfc')->on('clients');
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_general_ci';
