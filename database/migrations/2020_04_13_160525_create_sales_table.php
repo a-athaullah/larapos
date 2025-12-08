@@ -19,6 +19,7 @@ class CreateSalesTable extends Migration
             $table->unsignedFloat('total');
             $table->unsignedBigInteger('id');
             $table->unsignedBigInteger('store_id')->default(1);
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->date('created')->nullable();
             $table->foreign('id')->references('id')->on('users')->onDelete('cascade');
