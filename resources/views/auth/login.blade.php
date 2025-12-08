@@ -23,19 +23,40 @@
                 @if($errors->any())
                     <div class="alert-danger"> 
                 @foreach($errors->all() as $error) - {{ $error }} @endforeach</div> 
-                @endif<form action="{{ route('login') }}" method="POST">
+                @endif
+                <form action="{{ route('login') }}" method="POST">
                     <div class="input-group mb-3">
-                        <div class="input-group-text bg-dark text-white"> <small>Email</small></div> <input type="email" class="form-control" value="{{ old('email') }}" placeholder="Email Address" name="email" required>
+                        <div class="input-group-text bg-dark text-white"> 
+                            <small>Store</small>
+                        </div> 
+                        <input type="text" class="form-control" value="{{ old('store') }}" placeholder="Merchant Name" name="store" required>
                         <div class="input-group-append">
-                            <div class="input-group-text bg-dark text-white"> <svg class="bi bi-envelope-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <div class="input-group-text bg-dark text-white"> 
+                                <svg class="bi bi-house-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z"/>
+                                    <path fill-rule="evenodd" d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-text bg-dark text-white"> 
+                            <small>Email</small>
+                        </div> 
+                        <input type="email" class="form-control" value="{{ old('email') }}" placeholder="Email Address" name="email" required>
+                        <div class="input-group-append">
+                            <div class="input-group-text bg-dark text-white"> 
+                                <svg class="bi bi-envelope-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z" />
-                                </svg></div>
+                                </svg>
+                            </div>
                         </div>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-text bg-dark text-white"> <small>Pass</small></div> <input type="password" value="{{ old('password') }}" required class="form-control" placeholder="Password" name="password">
                         <div class="input-group-append">
-                            <div class="input-group-text bg-dark text-white"> <svg class="bi bi-shield-lock-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <div class="input-group-text bg-dark text-white"> 
+                                <svg class="bi bi-shield-lock-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M5.187 1.025C6.23.749 7.337.5 8 .5c.662 0 1.77.249 2.813.525a61.09 61.09 0 0 1 2.772.815c.528.168.926.623 1.003 1.184.573 4.197-.756 7.307-2.367 9.365a11.191 11.191 0 0 1-2.418 2.3 6.942 6.942 0 0 1-1.007.586c-.27.124-.558.225-.796.225s-.526-.101-.796-.225a6.908 6.908 0 0 1-1.007-.586 11.192 11.192 0 0 1-2.417-2.3C2.167 10.331.839 7.221 1.412 3.024A1.454 1.454 0 0 1 2.415 1.84a61.11 61.11 0 0 1 2.772-.815zm3.328 6.884a1.5 1.5 0 1 0-1.06-.011.5.5 0 0 0-.044.136l-.333 2a.5.5 0 0 0 .493.582h.835a.5.5 0 0 0 .493-.585l-.347-2a.5.5 0 0 0-.037-.122z" />
                                 </svg></div>
                         </div>
