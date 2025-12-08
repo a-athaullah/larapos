@@ -7,9 +7,11 @@ use App\Client;
 use App\Http\Requests\SaleRequest;
 use App\Product;
 use App\Sale;
+use App\Store;
 use App\Exports\SalesExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class SaleController extends Controller
 {
@@ -30,6 +32,7 @@ class SaleController extends Controller
     public function create()
     {
         //Get the clients information
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
         $clients = Client::orderBy('rfc', 'DESC')->get();
         //Get the products information
         $products = Product::orderBy('name', 'DESC')->get();
@@ -44,7 +47,7 @@ class SaleController extends Controller
 
         return view(
             'sales.create',
-            compact('clients', 'products', 'totalSalesPerDay')
+            compact('clients', 'store', 'products', 'totalSalesPerDay')
         );
     }
 
