@@ -25,7 +25,7 @@
                 @foreach($errors->all() as $error) - {{ $error }} @endforeach</div> 
                 @endif
                 <form action="{{ route('login') }}" method="POST">
-                    <div class="input-group mb-3">
+                    <!--div class="input-group mb-3">
                         <div class="input-group-text bg-dark text-white"> 
                             <small>Store</small>
                         </div> 
@@ -38,7 +38,7 @@
                                 </svg>
                             </div>
                         </div>
-                    </div>
+                    </div-->
                     <div class="input-group mb-3">
                         <div class="input-group-text bg-dark text-white"> 
                             <small>Email</small>
