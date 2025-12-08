@@ -33,6 +33,7 @@ class SaleController extends Controller
     {
         //Get the clients information
         $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $storeName = str_replace(' ','',ucwords($store->name)) ;
         $clients = Client::orderBy('rfc', 'DESC')->get();
         //Get the products information
         $products = Product::orderBy('name', 'DESC')->get();
@@ -47,7 +48,7 @@ class SaleController extends Controller
 
         return view(
             'sales.create',
-            compact('clients', 'store', 'products', 'totalSalesPerDay')
+            compact('clients', 'store', 'storeName','products', 'totalSalesPerDay')
         );
     }
 
