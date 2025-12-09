@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Z POS Web Apps</title>
+    <title>AlelPOS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -18,8 +18,12 @@
             <div class="col-12 col-md-12 p-3 p-md-5"></div>
             <div class="col-12 col-md-4"></div>
             <div class="col-12 col-md-4 p-3 p-md-5 login-box">
-                <h1 class="text-center display-3"><strong>Z</strong></h1>
-                <h1 class="text-center">LOGIN AREA</h1> 
+                <h1 class="text-center display-3">
+                    <object data="/img/logo.svg" type="image/svg+xml" width="100em"></object>
+                    <!-- <strong>AlelPOS</strong> -->
+                </h1>
+                <h1 class="text-center">AlelPOS</h1> 
+                <h2 class="text-center" style="margin-top:1em">Login</h1> 
                 @if($errors->any())
                     <div class="alert-danger"> 
                 @foreach($errors->all() as $error) - {{ $error }} @endforeach</div> 
