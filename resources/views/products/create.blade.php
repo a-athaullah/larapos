@@ -82,8 +82,6 @@
                                 errorDiv.setAttribute('class','alert alert-danger');
                                 errorDiv.append('To add more varian all existing varian can`t be empty');
 
-                                
-
                                 allowedToAdd = false
                             } 
                         });
@@ -122,7 +120,6 @@
                     }
 
                     function removeVarianInput(e){
-                        console.log('its here removeVarianInput')
                         e.preventDefault();
                         e.target.parentElement.remove()
                     }

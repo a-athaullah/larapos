@@ -19,7 +19,7 @@
 <div class="content">
     <div class="container-fluid lead">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card card-dark">
                     <div class="card-body">
                         <div id="js-requests-messages"></div> 
@@ -55,7 +55,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="card bg-dark text-white">
                     <div class="card-header text-white">
                         <h3 class="card-title">List Product</h3>

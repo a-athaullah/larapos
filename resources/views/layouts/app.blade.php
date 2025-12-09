@@ -9,7 +9,7 @@
     <title>Mayess Kitchen</title>
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <script src="{{asset('js/lara.js')}}" defer></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
@@ -28,6 +28,7 @@
 </head>
 
 <body class="bg-light" x-data='{ct: "Categories", pd: "Products", ads: "Add User", acs: "Add Customer", dbps: "Databased Products", acg: "Add Categories", cnpdt: " Create New Product", apd: "Add Products", title: "Mayess", nav1: "Home", cc: "Create Categories", nav2: "Doc", cn: "Category Name", nav3: "Data", cnct: "Create New Categories", sv: "Save Data", ctndb: "Categories databased", nav4: "Transaction", ncsa: "New Customer", inc: "Income", nav5: "Report", pro: "PRO", rpt: "Report", rptdm: "Report details menu", nav6: "WebApp", xpr: "Export Report", pap: "Premium App", db: "Database",dbs: "Register Database in here", pfc: "Profit Income", us: "User", gpr: "Group Report", pdpr: "Product Report", cs: "Customer", nus: "Create new user", usdb: "User Databased Management", usb: "User Report", cdmb: "Customer Databased Management", csr: "Customer Report"}'>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <div class="wrapper">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white"> 
             <a class="navbar-brand" href="/" >{{ $storeName }}</a> 

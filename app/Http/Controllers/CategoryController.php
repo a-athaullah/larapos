@@ -44,8 +44,46 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        Category::create($request->all());
-        return back()->with('created', true);
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        
+        $errors = [];
+        $success = [];
+        $data = [
+            'name' => trim(strtolower($request['name'])),
+            'store_id' => $store->store_id,
+        ];
+        switch ($request->action) {
+            case "create":
+                if (count($store->categories->where('name',$data['name'])) > 0){
+                    array_push($errors, "Category Name already exist");
+                }else{
+                    Category::create($data);
+                    array_push($success, "Success creating new Category");
+                }
+                break;
+            case "edit":
+                if ($selectedCategory = $store->categories->find($request['category_id'])){
+                    $selectedCategory->update($data);
+                    array_push($success, "Success updating category");
+                }else{
+                    array_push($errors, "Category not found");
+                }
+                break;
+            case "delete":
+                if ($selectedCategory = $store->categories->find($request['category_id'])){
+                    $selectedCategory->delete();
+                    array_push($success, "Success deleting category");
+                }else{
+                    array_push($errors, "Category not found");
+                }
+                break;
+            default:
+                array_push($errors, "Forbidden action");;
+                break;
+        }
+        if($request->action)
+        
+        return back()->with('created', $success)->with('errors',$errors);
     }
 
 

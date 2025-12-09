@@ -45,12 +45,24 @@ html {
   font-family: sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
 }
 
 article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
 }
+
+
+.nav-link{
+  --bs-nav-link-color:#505050;
+  color:var(--bs-nav-link-color);;
+}
+
+.nav-link.active{
+  font-weight:bold;
+}
+
+
 
 body {
   margin: 0;
@@ -2547,6 +2559,12 @@ textarea.form-control {
     transition: none;
   }
 }
+
+.btn-category-data{
+  float:left;
+  margin-left:0.5em;
+  margin-bottom:0.5em;
+} 
 
 .btn:hover {
   color: #212529;
