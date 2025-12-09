@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Http\Requests\CategoryRequest;
+use App\Store;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -13,8 +15,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $storeName = str_replace(' ','',ucwords($store->name)) ;
+
         $categories = Category::orderBy('name', 'asc')->paginate();
-        return view('categories.index', compact('categories'));
+        
+        return view('categories.create', compact('categories','store','storeName'));
     }
 
     /**
@@ -24,7 +30,10 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $storeName = str_replace(' ','',ucwords($store->name)) ;
+
+        return view('categories.create', compact('store','storeName'));
     }
 
     /**

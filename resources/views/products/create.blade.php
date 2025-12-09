@@ -1,6 +1,8 @@
-@extends('layouts.app') @section('content')<div class="content-header">
+@extends('layouts.app') @section('content')
+<div class="content-header">
     <div class="container lead text-center">
-        <h1 class="m-0 text-dark"> Products</h1> @if(session('created'))<div class="row">
+        <h1 class="m-0 text-dark"> Products</h1> @if(session('created'))
+        <div class="row">
             <div class="col-12">
                 <div class="alert alert-success"> Success Update</div>
             </div>
