@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Requests\ProductRequest;
 use App\Product;
+use App\Store;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -26,8 +28,11 @@ class ProductController extends Controller
      */
     public function create()
     {
+        //Get the store information
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $storeName = str_replace(' ','',ucwords($store->name)) ;
         $categories = Category::all();
-        return view('products.create', compact('categories'));
+        return view('products.create', compact('categories', 'store', 'storeName'));
     }
 
     /*
