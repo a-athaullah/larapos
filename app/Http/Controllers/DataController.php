@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Store;
+use Illuminate\Support\Facades\Auth;
 
 class DataController extends Controller
 {
@@ -23,6 +25,9 @@ class DataController extends Controller
      */
     public function index()
     {
-        return view('data');
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $storeName = str_replace(' ','',ucwords($store->name)) ;
+
+        return view('data', compact('store', 'storeName'));
     }
 }
