@@ -12,6 +12,7 @@
         <div class="row">
             <div class="col-12 col-md-3 p-3 p-md-4">
                 <form method="post" action="{{ route('products.store') }}">
+                    <input type="hidden" id="user-id" value="{{ Auth::user()->id }}">
                     <div class="card-body"> 
                         @if($errors->any())
                         <div class="alert alert-danger"> 
@@ -50,16 +51,80 @@
                         </div>
                         <div class="form-group" id="varians-input" style="margin-top:2em;"> 
                             <label for="varian">Varians</label> 
-                            <button onclick="return addVarianInput()" class="btn btn-lg" style="float:right; margin-top: -0.5em">
+                            <button id="add-varian-input" class="btn btn-lg" style="float:right; margin-top: -0.5em">
                                 <svg class="bi bi-plus-square-fill" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
                                 </svg>
                             </button>
-                            <input type="text" min="1" name="varian[]" class="form-control">
+                            <div id="error-add-varian-input"></div>
                         </div>
                         @csrf 
                         <button onclick="return confirm('Save Product ?');" type="submit" class="btn btn-dark btn-block btn-lg">Save </button>
                 </form>
+                <script>
+                    var addNewVarian = document.querySelector('#add-varian-input');
+                    addNewVarian.addEventListener('click', addVarianInput);
+
+                    function addVarianInput(e){
+                        console.log('its here')
+                        e.preventDefault();
+
+                        var inputElements = document.querySelectorAll("input[name='varian[]']");
+                        var allowedToAdd = true;
+
+                        inputElements.forEach((input, index) => {
+                            const value = input.value.trim();
+                            
+                            if (value === "") {
+                                const errorDiv = document.getElementById('error-add-varian-input');
+                                errorDiv.setAttribute('class','alert alert-danger');
+                                errorDiv.append('To add more varian all existing varian can`t be empty');
+
+                                
+
+                                allowedToAdd = false
+                            } 
+                        });
+
+                        if (allowedToAdd) {
+                            var divVarians = document.getElementById("varians-input");
+                            
+                            var divInput = document.createElement('div');
+                            divInput.setAttribute('style','position:relative;')
+
+                            var varianInput = document.createElement('input');
+                            varianInput.setAttribute('type','text');
+                            varianInput.setAttribute('name','varian[]');
+                            varianInput.setAttribute('class','form-control');
+                            varianInput.setAttribute('style','padding-right: 40px; box-sizing: border-box');
+
+                            divInput.appendChild(varianInput);
+
+                            var buttonRemoveStyle = 'position:absolute;right:0px;top:0.05em';
+                            var buttonRemove = document.createElement('button')
+                            buttonRemove.textContent = 'X';
+                            buttonRemove.setAttribute('class','btn btn-danger');
+                            buttonRemove.setAttribute('style', buttonRemoveStyle);
+                            buttonRemove.addEventListener('click', removeVarianInput);
+
+
+                            divInput.appendChild(buttonRemove);
+                            divVarians.appendChild(divInput);
+                        }else{
+                            setTimeout(() => {
+                                const errorDiv = document.getElementById('error-add-varian-input');
+                                errorDiv.textContent = "";
+                                errorDiv.removeAttribute('class');
+                            }, "3000");
+                        }
+                    }
+
+                    function removeVarianInput(e){
+                        console.log('its here removeVarianInput')
+                        e.preventDefault();
+                        e.target.parentElement.remove()
+                    }
+                </script>
             </div>
             <div class="col-12 col-md-6 p-3 p-md-6">
                 

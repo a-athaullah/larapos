@@ -37413,10 +37413,12 @@ var createSaleForm = document.querySelector('#createSaleForm');
 var errorSectionForm = document.querySelector('#js-requests-messages');
 var userid = document.querySelector('#user-id').value;
 
+
 if (productsTable) {
   productsTable.addEventListener('click', addToCartOneProduct);
   cartTable.addEventListener('click', cartEvents);
   createSaleForm.addEventListener('submit', storeSale);
+  addNewVarian.addEventListener('click', addVarianInput);
 }
 /*
 * Verify the fields in the form
@@ -37449,7 +37451,6 @@ function verifyFields(fields) {
 /*
 * Store the sale and send a AJAX request to store the data
 * */
-
 
 function storeSale(e) {
   e.preventDefault();

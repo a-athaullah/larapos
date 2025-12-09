@@ -34,7 +34,6 @@
                             <div class="form-group"> 
                                 <label for="rfc">Notes</label> 
                                 <textarea id="sales_notes" name="notes" class= "form-control" placeholder="Put transaction notes here" style= "resize: none; line-height: 0.75;"></textarea>
-                                
                             </div>
                             <div class="form-group">
                                 <table class="table">
