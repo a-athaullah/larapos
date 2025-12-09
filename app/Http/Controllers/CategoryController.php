@@ -18,8 +18,8 @@ class CategoryController extends Controller
         $store = Store::where('store_id', Auth::user()->store_id)->first();
         $storeName = str_replace(' ','',ucwords($store->name)) ;
 
-        $categories = Category::orderBy('name', 'asc')->paginate();
-        
+        $categories = $store->categories;
+
         return view('categories.create', compact('categories','store','storeName'));
     }
 

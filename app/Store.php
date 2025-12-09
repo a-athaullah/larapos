@@ -13,18 +13,18 @@ class Store extends Model
     ];
 
     public function users(){
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\User','store_id');
     }
 
     public function categories(){
-        return $this->hasMany('App\Category');
+        return $this->hasMany('App\Category','store_id');
     }
 
     public function products(){
-        return $this->hasMany('App\Product');
+        return $this->hasMany('App\Product','store_id');
     }
 
     public function sales(){
-        return $this->hasMany('App\Sale');
+        return $this->hasMany('App\Sale','store_id');
     }
 }

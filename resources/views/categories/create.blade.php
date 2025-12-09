@@ -14,6 +14,7 @@
         <div class="row">
             <div class="col-12 col-md-3 p-3 p-md-4" style="box-shadow: 0px 0 5px rgba(0, 0, 0, 0.3);">
                 <form method="post" action="{{ route('categories.store') }}">
+                    <input type="hidden" id="user-id" value="{{ Auth::user()->id }}">
                     <div class="card-body">
                         @if($errors->any())
                         <div class="alert alert-danger">
@@ -32,5 +33,8 @@
                 
             </div>
         </div>
+        <script>
+            var categories = @json($categories);
+        </script>
     </div>
 </div>@endsection
