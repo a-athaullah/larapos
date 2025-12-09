@@ -18,9 +18,10 @@ class ProductController extends Controller
     {
         $products = Product::latest()->paginate(6);
 
-        return view('products.index', [
-            'products' => $products
-        ]);
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $storeName = str_replace(' ','',ucwords($store->name)) ;
+        $categories = Category::all();
+        return view('products.create', compact('categories', 'store', 'storeName', 'products'));
     }
 
     /**
