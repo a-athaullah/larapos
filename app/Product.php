@@ -17,6 +17,10 @@ class Product extends Model
         return $this->belongsToMany('App\Cart', 'carts', 'sale_id');
     }
 
+    public function varians(){
+        return $this->hasMany('App\ProductVarian');
+    }
+
     public function getGetExtractAttribute() {
         return substr($this->description, 0, 50);
     }

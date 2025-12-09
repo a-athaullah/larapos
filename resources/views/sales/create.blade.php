@@ -22,7 +22,15 @@
             <div class="col-md-6">
                 <div class="card card-dark">
                     <div class="card-body">
-                        <div id="js-requests-messages"></div> @if($errors->any())<div class="alert alert-danger"> @foreach($errors->all() as $error) - {{ $error }} <br> @endforeach</div> @endif<form method="post" action="#" id="createSaleForm">
+                        <div id="js-requests-messages"></div> 
+                        @if($errors->any())
+                        <div class="alert alert-danger"> 
+                            @foreach($errors->all() as $error) - {{ $error }} 
+                                <br> 
+                            @endforeach
+                        </div> 
+                        @endif
+                        <form method="post" action="#" id="createSaleForm">
                             <div class="form-group"> 
                                 <label for="rfc">Notes</label> 
                                 <textarea id="sales_notes" name="notes" class= "form-control" placeholder="Put transaction notes here" style= "resize: none; line-height: 0.75;"></textarea>
