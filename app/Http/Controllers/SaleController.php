@@ -60,7 +60,7 @@ class SaleController extends Controller
         $sale = Sale::create(
             [
                 'total'   => $request->input('total'),
-                'rfc'     => $request->input('rfc'),
+                'notes'     => $request->input('notes'),
                 'id'      => $request->input('id'),
                 'created' => date('Y-m-d')
             ]

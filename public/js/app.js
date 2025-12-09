@@ -37433,11 +37433,11 @@ function verifyFields(fields) {
   var verificationErrors = [];
 
   if (fields[0].length === 0) {
-    verificationErrors.push('Cart Is Empty');
+    verificationErrors.push('Cart can`t be Empty');
   }
 
   if (fields[1] === '') {
-    verificationErrors.push('Select your customer');
+    verificationErrors.push('Notes can`t be empty');
   }
 
   if (fields[2] == 0) {
@@ -37456,7 +37456,7 @@ function storeSale(e) {
   var route = '/sales'; // Get all the fields and values
 
   var products = document.querySelectorAll('.product');
-  var clientRfc = document.querySelector('#rfc').value;
+  var salesNotes = document.querySelector('#sales_notes').value;
   var productArray = [];
   var token = document.getElementsByName('_token')[0].value;
   var cartTotal = document.querySelector('#cartTotal').innerText; //Fill the product array with every product data
@@ -37472,7 +37472,7 @@ function storeSale(e) {
     });
   }); //Create a fields variable to passes the data to verifyFields method
 
-  var fields = [productArray, clientRfc, cartTotal]; //Save the array with all the errors found
+  var fields = [productArray, salesNotes, cartTotal]; //Save the array with all the errors found
 
   var verification = verifyFields(fields);
 
@@ -37480,7 +37480,7 @@ function storeSale(e) {
     // //Create the form data
     var formData = new FormData(); //Fill the formdata
 
-    formData.append('rfc', clientRfc);
+    formData.append('notes', salesNotes);
     formData.append('products', JSON.stringify(productArray));
     formData.append('total', cartTotal);
     formData.append('_token', token);
@@ -37508,7 +37508,7 @@ function storeSale(e) {
         var errors = response.errors;
 
         if (errors.rfc) {
-          showRequestsMessages('Select customer and continues', 'danger');
+          showRequestsMessages('Notes can`t be empty', 'danger');
         }
 
         if (errors.total) {

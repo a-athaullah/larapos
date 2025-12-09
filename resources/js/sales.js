@@ -44,7 +44,7 @@ function storeSale(e) {
 
     // Get all the fields and values
     let products = document.querySelectorAll('.product');
-    let clientRfc = document.querySelector('#rfc').value;
+    let salesNotes = document.querySelector('#sales_notes').value;
     let productArray = [];
     let token = document.getElementsByName('_token')[0].value;
     let cartTotal = document.querySelector('#cartTotal').innerText;
@@ -62,7 +62,7 @@ function storeSale(e) {
     });
 
     //Create a fields variable to passes the data to verifyFields method
-    let fields = [productArray, clientRfc, cartTotal];
+    let fields = [productArray, salesNotes, cartTotal];
     //Save the array with all the errors found
     let verification = verifyFields(fields);
 
@@ -70,7 +70,7 @@ function storeSale(e) {
         // //Create the form data
         const formData = new FormData();
         //Fill the formdata
-        formData.append('rfc', clientRfc);
+        formData.append('notes', salesNotes);
         formData.append('products', JSON.stringify(productArray));
         formData.append('total', cartTotal);
         formData.append('_token', token);
@@ -87,7 +87,7 @@ function storeSale(e) {
         xhr.onload = function () {
             //Created
             if (this.status === 201) {
-                showRequestsMessages('Transaksi sukses', 'success');
+                showRequestsMessages('Transaction Success', 'success');
                 resetCart();
                 createSaleForm.reset();
                 location.reload();
@@ -97,8 +97,8 @@ function storeSale(e) {
                 let response = JSON.parse(this.response);
                 let errors = response.errors;
 
-                if (errors.rfc) {
-                    showRequestsMessages('Pilih pelanggan dahulu', 'danger');
+                if (errors.notes) {
+                    showRequestsMessages("Notes can`t be empty", 'danger');
                 }
 
                 if (errors.total) {
