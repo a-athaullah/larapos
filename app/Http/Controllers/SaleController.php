@@ -31,7 +31,7 @@ class SaleController extends Controller
      */
     public function create()
     {
-        //Get the clients information
+        //Get the store information
         $store = Store::where('store_id', Auth::user()->store_id)->first();
         $storeName = str_replace(' ','',ucwords($store->name)) ;
         // $clients = Client::orderBy('rfc', 'DESC')->get();
