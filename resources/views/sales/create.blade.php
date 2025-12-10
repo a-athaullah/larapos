@@ -1,4 +1,5 @@
-@extends('layouts.app') @section('content')<div class="content-header">
+@extends('layouts.app') @section('content')
+<div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-12">
