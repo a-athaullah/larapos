@@ -17,8 +17,12 @@ class Product extends Model
         return $this->belongsToMany('App\Cart', 'carts', 'sale_id');
     }
 
+    public function store() {
+        return $this->belongsTo('App\Store');
+    }
+
     public function varians(){
-        return $this->hasMany('App\ProductVarian');
+        return $this->hasMany('App\ProductVarian','product_id');
     }
 
     public function getGetExtractAttribute() {

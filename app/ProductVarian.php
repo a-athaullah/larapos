@@ -11,4 +11,8 @@ class ProductVarian extends Model
         'name', 'product_id', 'store_id'
     ];
 
+    public function product()
+    {
+        return $this->belongsTo('App\Product', 'product_id');
+    }
 }

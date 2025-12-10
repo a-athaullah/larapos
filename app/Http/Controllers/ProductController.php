@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Requests\ProductRequest;
 use App\Product;
+use App\ProductVarian;
 use App\Store;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -16,9 +17,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::latest()->paginate(6);
-
         $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $products = $store->products;
         $storeName = str_replace(' ','',ucwords($store->name)) ;
         $categories = Category::all();
         return view('products.create', compact('categories', 'store', 'storeName', 'products'));
@@ -41,9 +41,63 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        //Store the product
-        Product::create($request->all());
-        return back()->with('created', true);
+        //Get the store information
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $errors = [];
+        $success = [];
+        $data = [
+            'name' => trim($request->name),
+            'description' => trim($request->description),
+            'product_left' => $request->product_left,
+            'price' => $request->price,
+            'cost' => $request->cost,
+            'category_id' => $request->category_id,
+            'store_id' => $store->store_id,
+        ];
+        $varians = [];
+        if($request->varian){
+            foreach ($request->varian as $data_varian) {
+                array_push($varians, [
+                    'name' => trim($data_varian),
+                    'store_id' => $store->store_id
+                ]);
+            }
+        }
+
+        switch ($request->action) {
+            case "create":
+                $newProduct =$store->products()->create($data);
+                if ($varians){
+                    $newProduct->varians()->createMany($varians);
+                }
+                array_push($success, "Success creating new Product");
+                break;
+            case "edit":
+                if ($selectedProduct = $store->products->find($request['product_id'])){
+                    $selectedProduct->varians()->delete();
+                    $selectedProduct->update($data);
+                    if ($varians){
+                        $selectedProduct->varians()->createMany($varians);
+                    }
+                    array_push($success, "Success updating category");
+                }else{
+                    array_push($errors, "Category not found");
+                }
+                break;
+            case "delete":
+                if ($selectedProduct = $store->products->find($request['product_id'])){
+                    $selectedProduct->delete();
+                    array_push($success, "Success deleting category");
+                }else{
+                    array_push($errors, "Category not found");
+                }
+                break;
+            default:
+                array_push($errors, "Forbidden action");;
+                break;
+        }
+       
+        return back()->with('created', $success)->with('errors',$errors);
     }
 
     /**

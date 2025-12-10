@@ -1,12 +1,16 @@
 @extends('layouts.app') @section('content')
 <div class="content-header">
-    <div class="container lead text-center">
-        <h1 class="m-0 text-dark"> Products</h1> @if(session('created'))
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-success"> Success Update</div>
+    <div class="container-fluid">
+        <div class="row mb-3 p-2">
+            <div class="col-sm-12">
+                <h1 class="title text-dark"> 
+                    <svg class="bi bi-ui-checks-grid" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M2 10h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1m9-9h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 9a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zm0-10a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM2 9a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2zm7 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM0 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.354.854a.5.5 0 1 0-.708-.708L3 3.793l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0z"/>
+                    </svg> 
+                    Products 
+                </h1>
             </div>
-        </div> @endif
+        </div>
     </div>
 </div>
 <div class="content">
@@ -20,18 +24,29 @@
                     </div>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    @if(session('created'))
+                                    <div class="alert alert-success">
+                                        @foreach(session('created') as $success) {{ $success }}
+                                        <br>
+                                        @endforeach
+                                    </div>
+                                    @endif
+                                    @if(session('errors'))
+                                    <div class="alert alert-danger">
+                                        @foreach(session('errors') as $error) {{ $error }}
+                                        <br>
+                                        @endforeach
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
                             <form method="post" action="{{ route('products.store') }}">
                                 <input type="hidden" id="user-id" value="{{ Auth::user()->id }}">
-                                <div class="card-body"> 
-                                    @if($errors->any())
-                                    <div class="alert alert-danger"> 
-                                        @foreach($errors->all() as $error) - {{ $error }} 
-                                        <br> 
-                                        @endforeach
-                                    </div> 
-                                    @endif
-                                    <div class="form-group"> 
-                                        <label>Product</label> 
+                                <div class="card-body" style="margin-bottom:1em;"> 
+                                    <div class="form-group" style="margin-top:1em"> 
+                                        <label>Product Name</label> 
                                         <input type="text" class="form-control" value="{{ old('name') }}" name="name" placeholder="Product Name" required>
                                     </div>
                                     <div class="form-group"> 
@@ -60,46 +75,220 @@
                                     </div>
                                     <div class="form-group" id="varians-input" style="margin-top:2em;"> 
                                         <label>Varians</label> 
-                                        <button id="add-varian-input" class="btn btn-lg" style="float:right; margin-top: -0.5em">
+                                        <button id="add-varian-input-create" class="btn btn-lg" style="float:right; margin-top: -0.5em">
                                             <svg class="bi bi-plus-square-fill" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
                                                 <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
                                             </svg>
                                         </button>
-                                        <div id="error-add-varian-input"></div>
+                                        <div id="error-add-varian-input-create"></div>
                                     </div>
                                     @csrf 
-                                    <button onclick="return confirm('Save Product ?');" type="submit" class="btn btn-dark btn-block btn-lg">Save </button>
+                                    <button onclick="return confirm('Save Product ?');" type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="create">Add New Product</button>
+                                </div>    
                             </form>
                         </div>
                         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                            test 1
+                            <form method="post" action="{{ route('products.store') }}">
+                                <input type="hidden" id="user-id" value="{{ Auth::user()->id }}">
+                                <div class="card-body" style="margin-bottom:2em;"> 
+                                    <div class="form-group" style="margin-top:1em"> 
+                                        <label>Product ID</label> 
+                                        <input type="number" class="form-control" value="" name="product_id" id="edit-product-id" placeholder="Product Name" readonly>
+                                    </div>
+                                    <div class="form-group" style="margin-top:1em"> 
+                                        <label>Product Name</label> 
+                                        <input type="text" class="form-control" value="" name="name" id="edit-product-name" placeholder="Product Name" required>
+                                    </div>
+                                    <div class="form-group"> 
+                                        <label>Categories</label> 
+                                        <select required name="category_id" id="edit-product-catId" class="form-control">
+                                            <option value="">Select Categories</option> 
+                                            @foreach($categories as $category)
+                                            <option value="{{ $category->category_id }}"> {{ $category->name }}</option> 
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group"> 
+                                        <label>Sell Price</label> 
+                                        <input type="number" min="1" name="price" id="edit-product-price" class="form-control" required>
+                                    </div>
+                                    <div class="form-group"> 
+                                        <label>Description </label>
+                                        <textarea class="form-control" name="description" id="edit-product-description" ></textarea>
+                                    </div>
+                                    <div class="form-group"> 
+                                        <label>Inventori </label> 
+                                        <input type="number" min="0" name="product_left"  id="edit-product-inventory" class="form-control">
+                                    </div>
+                                    <div class="form-group"> 
+                                        <label>Cost</label> 
+                                        <input type="number" min="1" name="cost" id="edit-product-cost" class="form-control">
+                                    </div>
+                                    <div class="form-group"> 
+                                        <label>Total Sold</label> 
+                                        <input type="number" min="1" name="total_sold" id="edit-product-sold" class="form-control" readonly>
+                                    </div>
+                                    <div class="form-group" id="edit-product-varians" style="margin-top:2em;"> 
+                                        <label>Varians</label> 
+                                        <button id="add-varian-input-edit" class="btn btn-lg" style="float:right; margin-top: -0.5em">
+                                            <svg class="bi bi-plus-square-fill" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+                                            </svg>
+                                        </button>
+                                        <div id="error-add-varian-input-edit"></div>
+                                    </div>
+                                    @csrf 
+                                    <button onclick="return confirm('Save Product Change ?');" type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="edit">Edit Product</button>
+                                    <button onclick="return confirm('Delete Product ?');" type="submit" class="btn btn-danger btn-block btn-lg" name="action" value="delete">Delete Product</button>
+                                </div>    
+                            </form>
                         </div>
                     </div>
                 </nav>
             </div>
             <div class="col-md-8" style="margin-top:2em; padding-top:1em;">
                 @foreach($products as $product)
-                <div data-id="{{$category->category_id}}" data-name="{{$category->name}}" class="btn-category-data col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="cursor:pointer;height:172px;"> 
-                    <h4 data-id="{{$category->category_id}}" data-name="{{$category->name}}" style="font-weight:bold;">{{ $product->name }}</h3>
+                <div class="col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="height:172px;float:left;margin-left:1em;margin-bottom:1em;"> 
+                    <h4 data-id="{{$product->category_id}}" data-name="{{$category->name}}" style="font-weight:bold;">{{ $product->name }}</h3>
+                    <div class="btn-product-data" style = "width:100%;height:100%;position:absolute;top:0;left:0;z-index:99;background-color:none;cursor:pointer"
+                        data-id="{{$product->product_id}}" 
+                        data-name="{{$product->name}}" 
+                        data-price = "{{$product->price }}"
+                        data-cost = "{{$product->cost }}"
+                        data-description = "{{$product->description }}"
+                        data-inventory = "{{$product->product_left }}" 
+                        data-category_id = "{{$product->category_id }}" 
+                        data-store_id = "{{$product->store_id }}" 
+                        data-sold = "{{$product->total_sold }}" 
+                        data-varians = "{{ json_encode($product->varians) }}"
+                    > 
+                    </div>
                 </div>
                 @endforeach
             </div>
             <script>
-                var addNewVarian = document.querySelector('#add-varian-input');
-                addNewVarian.addEventListener('click', addVarianInput);
+                const elementsProducts = document.querySelectorAll('.btn-product-data');
 
-                function addVarianInput(e){
-                    console.log('its here')
+                var addNewVarian = document.querySelector('#add-varian-input-create');
+                addNewVarian.addEventListener('click', addVarianInputCreate);
+
+                var addNewVarianEdit = document.querySelector('#add-varian-input-edit');
+                addNewVarianEdit.addEventListener('click', addVarianInputEdit);
+
+                elementsProducts.forEach(elementsProduct => {
+                    elementsProduct.addEventListener('click', selectProductData);
+                });
+
+                function selectProductData(e){
+                    e.preventDefault();
+                    $('#edit-prod-tab').trigger('click');
+
+                    var dataElement = e.target.dataset;
+                
+                    $("#edit-product-id").val(dataElement.id);
+                    $("#edit-product-name").val(dataElement.name);
+                    $("#edit-product-catId").val(dataElement.category_id);
+                    $("#edit-product-price").val(dataElement.price);
+                    $("#edit-product-description").val(dataElement.description);
+                    $("#edit-product-inventory").val(dataElement.inventory);
+                    $("#edit-product-cost").val(dataElement.cost);
+                    $("#edit-product-sold").val(dataElement.sold);
+
+                    var varians = JSON.parse(dataElement.varians);
+
+                    // empty varian container
+                    $('.edit-prod-varian-container').remove();
+
+                    varians.forEach((varian)=>{
+                        var divVarians = document.getElementById("edit-product-varians");
+                        
+                        var divInput = document.createElement('div');
+                        divInput.setAttribute('style','position:relative;')
+                        divInput.setAttribute('class','edit-prod-varian-container')
+
+                        var varianInput = document.createElement('input');
+                        varianInput.setAttribute('type','text');
+                        varianInput.setAttribute('name','varian[]');
+                        varianInput.setAttribute('class','form-control edit-product-varian-name');
+                        varianInput.setAttribute('style','padding-right: 40px; box-sizing: border-box');
+                        varianInput.value = varian.name;
+
+                        divInput.appendChild(varianInput);
+
+                        var buttonRemoveStyle = 'position:absolute;right:0px;top:0.05em';
+                        var buttonRemove = document.createElement('button')
+                        buttonRemove.textContent = 'X';
+                        buttonRemove.setAttribute('class','btn btn-danger');
+                        buttonRemove.setAttribute('style', buttonRemoveStyle);
+                        buttonRemove.addEventListener('click', removeVarianInput);
+                        
+                        divInput.appendChild(buttonRemove);
+                        divVarians.appendChild(divInput);
+                    });
+                }
+
+                function addVarianInputEdit(e){
                     e.preventDefault();
 
-                    var inputElements = document.querySelectorAll("input[name='varian[]']");
+                    var inputElements = document.querySelectorAll(".edit-product-varian-name");
                     var allowedToAdd = true;
 
                     inputElements.forEach((input, index) => {
                         const value = input.value.trim();
                         
                         if (value === "") {
-                            const errorDiv = document.getElementById('error-add-varian-input');
+                            const errorDiv = document.getElementById('error-add-varian-input-edit');
+                            errorDiv.setAttribute('class','alert alert-danger');
+                            errorDiv.append('To add more varian all existing varian can`t be empty');
+
+                            allowedToAdd = false
+                        } 
+                    });
+
+                    if (allowedToAdd) {
+                        var divVarians = document.getElementById("edit-product-varians");
+                        
+                        var divInput = document.createElement('div');
+                        divInput.setAttribute('style','position:relative;')
+                        divInput.setAttribute('class','edit-prod-varian-container')
+
+                        var varianInput = document.createElement('input');
+                        varianInput.setAttribute('type','text');
+                        varianInput.setAttribute('name','varian[]');
+                        varianInput.setAttribute('class','form-control edit-product-varian-name');
+                        varianInput.setAttribute('style','padding-right: 40px; box-sizing: border-box');
+
+                        divInput.appendChild(varianInput);
+
+                        var buttonRemoveStyle = 'position:absolute;right:0px;top:0.05em';
+                        var buttonRemove = document.createElement('button')
+                        buttonRemove.textContent = 'X';
+                        buttonRemove.setAttribute('class','btn btn-danger');
+                        buttonRemove.setAttribute('style', buttonRemoveStyle);
+                        buttonRemove.addEventListener('click', removeVarianInput);
+                        
+                        divInput.appendChild(buttonRemove);
+                        divVarians.appendChild(divInput);
+                    }else{
+                        setTimeout(() => {
+                            const errorDiv = document.getElementById('error-add-varian-input-edit');
+                            errorDiv.textContent = "";
+                            errorDiv.removeAttribute('class');
+                        }, "3000");
+                    }
+                }
+
+                function addVarianInputCreate(e){
+                    e.preventDefault();
+
+                    var inputElements = document.querySelectorAll(".new-product-varian");
+                    var allowedToAdd = true;
+
+                    inputElements.forEach((input, index) => {
+                        const value = input.value.trim();
+                        
+                        if (value === "") {
+                            const errorDiv = document.getElementById('error-add-varian-input-create');
                             errorDiv.setAttribute('class','alert alert-danger');
                             errorDiv.append('To add more varian all existing varian can`t be empty');
 
@@ -116,7 +305,7 @@
                         var varianInput = document.createElement('input');
                         varianInput.setAttribute('type','text');
                         varianInput.setAttribute('name','varian[]');
-                        varianInput.setAttribute('class','form-control');
+                        varianInput.setAttribute('class','form-control new-product-varian');
                         varianInput.setAttribute('style','padding-right: 40px; box-sizing: border-box');
 
                         divInput.appendChild(varianInput);
@@ -133,7 +322,7 @@
                         divVarians.appendChild(divInput);
                     }else{
                         setTimeout(() => {
-                            const errorDiv = document.getElementById('error-add-varian-input');
+                            const errorDiv = document.getElementById('error--create');
                             errorDiv.textContent = "";
                             errorDiv.removeAttribute('class');
                         }, "3000");
