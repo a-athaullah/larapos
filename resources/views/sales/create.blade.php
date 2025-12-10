@@ -1,7 +1,7 @@
 @extends('layouts.app') @section('content')
 <div class="content-header">
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row mb-3 p-2">
             <div class="col-sm-12">
                 <h1 class="title text-dark"> 
                     <svg class="bi bi-cart3" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
