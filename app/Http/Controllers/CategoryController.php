@@ -81,8 +81,7 @@ class CategoryController extends Controller
                 array_push($errors, "Forbidden action");;
                 break;
         }
-        if($request->action)
-        
+       
         return back()->with('created', $success)->with('errors',$errors);
     }
 
