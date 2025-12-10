@@ -105,11 +105,6 @@
             const elementsCatName = document.querySelector('#category-name-input');
             
             const submitButton = document.querySelector('#submit-category');
-
-            // const elementsRadioEdit = document.querySelector('#editCategoryAction');
-            // const elementsRadioCreate = document.querySelector('#newCategoryAction');
-            
-            // elementsRadioCreate.addEventListener('change', goToCreateNewMode);
             
             elementsCategory.forEach(elementsCategory => {
                 elementsCategory.addEventListener('click', selectCategoryData);
