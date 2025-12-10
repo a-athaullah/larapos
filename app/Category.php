@@ -14,6 +14,6 @@ class Category extends Model
 
     //This model groups 1 or N products
     public function products() {
-        return $this->hasMany('App\Product');
+        return $this->hasMany('App\Product', 'category_id');
     }
 }

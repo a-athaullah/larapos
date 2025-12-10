@@ -24,7 +24,6 @@
                     </div>
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                            
                             <div class="row" style="margin-top:2em;">
                                 <div class="col-12">
                                     @if(session('created'))
@@ -46,7 +45,6 @@
                             <form method="post" action="{{ route('categories.store') }}">
                                 <input type="hidden" id="new-cat-user-id" value="{{ Auth::user()->id }}">
                                 <div class="card-body">
-                                    
                                     <div class="form-group" style="margin-top:1em">
                                         <label>Category Name</label>
                                         <input type="text" class="form-control" id="newcategory-name-input" name="name" placeholder="Insert categories name"  value="{{ old('name') ?? '' }}" required>
@@ -62,7 +60,6 @@
                         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                             <form method="post" action="{{ route('categories.store') }}">
                                 <input type="hidden" id="user-id" value="{{ Auth::user()->id }}">
-                                
                                 <div class="card-body">
                                     <div class="form-group" style="margin-top:1em">
                                         <label>Category ID</label>
@@ -97,9 +94,6 @@
         </div>
         
         <script>
-            const saveButtonText = "Create New Category";
-            const editButtonText = "Edit New Category";
-
             const elementsCategory = document.querySelectorAll('.btn-category-data');
             const elementsCatId = document.querySelector('#category-id-input');
             const elementsCatName = document.querySelector('#category-name-input');
@@ -118,8 +112,6 @@
                 
                 elementsCatId.value = dataElement.id;
                 elementsCatName.value = dataElement.name;
-
-                
             }
 
         </script>
