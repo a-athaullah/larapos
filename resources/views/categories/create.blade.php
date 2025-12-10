@@ -1,7 +1,16 @@
 @extends('layouts.app') @section('content')
 <div class="content-header">
-    <div class="container text-center lead">
-        <h1 class="m-0 text-dark" x-text="cc"></h1>
+    <div class="container-fluid">
+        <div class="row mb-3 p-2">
+            <div class="col-sm-12">
+                <h1 class="title text-dark"> 
+                    <svg class="bi bi-ui-checks-grid" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M2 10h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1m9-9h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 9a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1zm0-10a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM2 9a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2zm7 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2zM0 2a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm5.354.854a.5.5 0 1 0-.708-.708L3 3.793l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0z"/>
+                    </svg> 
+                    Categories 
+                </h1>
+            </div>
+        </div>
     </div>
 </div>
 <div class="content">
@@ -80,7 +89,7 @@
             </div>
             <div class="col-md-8" style="margin-top:2em; padding-top:1em;">
                 @foreach($categories as $category)
-                <div data-id="{{$category->category_id}}" data-name="{{$category->name}}" class="btn-category-data col-md-2 p-2 p-md-5 bg-dark rounded text-light text-center" style="cursor:pointer;height:172px;"> 
+                <div data-id="{{$category->category_id}}" data-name="{{$category->name}}" class="btn-category-data col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="cursor:pointer;height:172px;"> 
                     <h4 data-id="{{$category->category_id}}" data-name="{{$category->name}}" style="font-weight:bold;">{{ $category->name }}</h3>
                 </div>
                 @endforeach
