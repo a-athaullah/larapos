@@ -13,7 +13,7 @@ class CreateProductVarianTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_varian', function (Blueprint $table) {
+        Schema::create('product_varians', function (Blueprint $table) {
             $table->id('varian_id');
             $table->string('name');
             $table->unsignedBigInteger('product_id');
@@ -33,6 +33,6 @@ class CreateProductVarianTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_varian');
+        Schema::dropIfExists('product_varians');
     }
 }
