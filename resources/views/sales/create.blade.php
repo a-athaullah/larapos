@@ -9,20 +9,44 @@
                     </svg> Transaction 
                 </h1>
             </div>
-            <div class="col-12 text-center">
-                <h5>Income to day: <strong>Rp.{{ $totalSalesPerDay }}</strong></h5>
-            </div>
-        </div> @if(session('created'))<div class="row">
-            <div class="col-12">
-                <div class="alert alert-success"> Transaction Success</div>
-            </div>
-        </div> @endif
+        </div> 
     </div>
 </div>
 <div class="content">
     <div class="container-fluid lead">
         <div class="row">
             <div class="col-md-4">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="create-newsale-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">New Transaction</button>
+                        <button class="nav-link" id="edit-sale-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Edit Transaction</button>
+                    </div>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    @if(session('created'))
+                                    <div class="alert alert-success">
+                                        @foreach(session('created') as $success) {{ $success }}
+                                        <br>
+                                        @endforeach
+                                    </div>
+                                    @endif
+                                    @if(session('errors'))
+                                    <div class="alert alert-danger">
+                                        @foreach(session('errors') as $error) {{ $error }}
+                                        <br>
+                                        @endforeach
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            
+                        </div>
+                    </div>
+                </nav>
                 <div class="card card-dark">
                     <div class="card-body">
                         <div id="js-requests-messages"></div> 
@@ -59,28 +83,58 @@
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="card bg-dark text-white">
-                    <div class="card-header text-white">
-                        <h3 class="card-title">List Product</h3>
-                    </div>
-                    <div class="card-body table-responsive p-0 text-white" style="height: 300px;">
-                        <table class="table table-head-fixed text-nowrap text-white">
-                            <thead>
-                                <tr>
-                                    <th>Kode</th>
-                                    <th>Product</th>
-                                    <th>Add</th>
-                                </tr>
-                            </thead>
-                            <tbody id="products-table"> @foreach($products as $product)<tr>
-                                    <td>{{ $product->product_id }}</td>
-                                    <td>{{ $product->name }}</td>
-                                    <td> <button class="btn btn-success btn-sm" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-id="{{ $product->product_id }}" data-left="{{ $product->product_left }}"> <i class="fas fa-plus"></i> Add </button></td>
-                                </tr> @endforeach</tbody>
-                        </table>
+                <input type="text" placeholder="Search" id="product-search" class=form-control style="margin-bottom:2em;margin-left:1em;width:1000px">
+                @foreach($products as $product)
+                <div class="btn-product-data-container col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="height:183px;float:left;margin-left:1em;margin-bottom:1em;"> 
+                    <h5 data-id="{{$product->category_id}}" data-name="{{$product->category->name}}" style="font-weight:bold;">{{ $product->name }}</h5>
+                    @php
+                        $varians=[];
+                        foreach ($product->varians as $data_varian) {
+                            array_push($varians, trim($data_varian->name));
+                        }
+                    @endphp
+                    <h6 class="prod-card-varian" style="margin-top:1em">{{ $varians ? implode(" | ", $varians) : $product->description}}</h6>
+                    <h6 class="prod-card-price" style="margin-top:1em;font-size:bold;bottom:0.3em;left:0;position:absolute;width:100%;border-top: 1px solid #fff;padding-top:0.3em">Rp {{ $product->price }},00</h6>
+                    <div class="btn-product-data" style = "width:100%;height:100%;position:absolute;top:0;left:0;z-index:99;background-color:none;cursor:pointer"
+                        data-id="{{$product->product_id}}" 
+                        data-name="{{$product->name}}" 
+                        data-price = "{{$product->price }}"
+                        data-cost = "{{$product->cost }}"
+                        data-description = "{{$product->description }}"
+                        data-inventory = "{{$product->product_left }}" 
+                        data-category_id = "{{$product->category_id }}" 
+                        data-store_id = "{{$product->store_id }}" 
+                        data-sold = "{{$product->total_sold }}" 
+                        data-varians = "{{ json_encode($product->varians) }}"
+                    > 
                     </div>
                 </div>
+                @endforeach
             </div>
         </div>
     </div>
-</div> @endsection
+</div> 
+<script>
+    const elementsProductsContainer = document.querySelectorAll('.btn-product-data-container');
+
+    const searchProductInput = document.getElementById('product-search');
+    searchProductInput.addEventListener('keyup', searchProduct);
+
+    function searchProduct(e){
+        e.preventDefault;
+        var keyword = e.target.value.trim().toLowerCase()
+
+        elementsProductsContainer.forEach(elementsProductCard => {
+            //get data
+            var dataset = elementsProductCard.querySelector('.btn-product-data').dataset;
+            var prodName = dataset.name.trim().toLowerCase();
+            var prodDesc = dataset.description.trim().toLowerCase();
+
+            if (prodName.indexOf(keyword) == -1 && prodDesc.indexOf(keyword) == -1) {
+                elementsProductCard.hidden = true;
+            }else{
+                elementsProductCard.hidden = false;
+            }
+        });
+    }
+</script>@endsection

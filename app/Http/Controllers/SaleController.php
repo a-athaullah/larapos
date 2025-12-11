@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Cart;
-use App\Client;
 use App\Http\Requests\SaleRequest;
 use App\Product;
 use App\Sale;
@@ -12,6 +11,7 @@ use App\Exports\SalesExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class SaleController extends Controller
 {
@@ -20,8 +20,29 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $sales = Sale::latest()->paginate();
-        return view('sales.index', compact('sales'));
+        //Get the store information
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $storeName = str_replace(' ','',ucwords($store->name)) ;
+
+        $products = $store->products->sortByDesc('total_sold')->sortByDesc('product_id');
+
+        $sales = $store->sales()->whereDate('created_at', Carbon::today())->get();
+
+        $revenue = 0;
+        $profit = 0;
+        foreach ($sales as $sale) {
+            $revenue += $sale->total;
+            $cost=0;
+            foreach ($sale->carts as $cart) {
+                $cost += $cart->total_cost;
+            }
+            $profit += $sale->total - $cost;
+        }
+        
+        return view(
+            'sales.create',
+            compact('store', 'storeName','products', 'sales', 'revenue', 'profit')
+        );
     }
 
     /*
