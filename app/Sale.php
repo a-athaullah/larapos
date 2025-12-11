@@ -18,15 +18,13 @@ class Sale extends Model
 
 
 
-    public function client() {
-        return $this->belongsTo('App\Client', 'rfc');
-    }
-
     // This model can exists in N carts
     public function carts() {
-        return $this->belongsToMany('App\Cart', 'sales', 'sale_id',
-                                    'sale_id', 'sale_id', 'sale_id')
-            ;
+        return $this->hasMany('App\Cart', 'sale_id');
+    }
+
+    public function store() {
+        return $this->belongsTo('App\Store', 'store_id');
     }
 
 }

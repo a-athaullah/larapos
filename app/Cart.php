@@ -31,11 +31,11 @@ class Cart extends Model
 
     //This model can have one or many sales
     public function sales() {
-        return $this->hasMany('App\Sale', 'sale_id', 'sale_id');
+        return $this->belongsTo('App\Sale', 'sale_id');
     }
 
     //This model can have one or many products
     public function products() {
-        return $this->hasMany('App\Product', 'product_id', 'product_id');
+        return $this->hasOne('App\Product', 'product_id');
     }
 }
