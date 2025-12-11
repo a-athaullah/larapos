@@ -139,7 +139,7 @@
                                     </div>
                                     @csrf 
                                     <button onclick="return confirm('Save Product Change ?');" type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="edit">Edit Product</button>
-                                    <button onclick="return confirm('Delete Product ?');" type="submit" class="btn btn-danger btn-block btn-lg" name="action" value="delete">Delete Product</button>
+                                    <!--button onclick="return confirm('Delete Product ?');" type="submit" class="btn btn-danger btn-block btn-lg" name="action" value="delete">Delete Product</button-->
                                 </div>    
                             </form>
                         </div>
@@ -150,7 +150,7 @@
                 <input type="text" placeholder="Search" id="product-search" class=form-control style="margin-bottom:2em;margin-left:1em;width:1000px">
                 @foreach($products as $product)
                 <div class="btn-product-data-container col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="height:183px;float:left;margin-left:1em;margin-bottom:1em;"> 
-                    <h5 data-id="{{$product->category_id}}" data-name="{{$category->name}}" style="font-weight:bold;">{{ $product->name }}</h5>
+                    <h5 data-id="{{$product->category_id}}" data-name="{{$product->category->name}}" style="font-weight:bold;">{{ $product->name }}</h5>
                     @php
                         $varians=[];
                         foreach ($product->varians as $data_varian) {
