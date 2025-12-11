@@ -208,7 +208,6 @@
                             elementsProductCard.hidden = false;
                         }
                     });
-
                 }
 
                 function selectProductData(e){
