@@ -18,7 +18,7 @@ class ProductController extends Controller
     public function index()
     {
         $store = Store::where('store_id', Auth::user()->store_id)->first();
-        $products = $store->products;
+        $products = $store->products->sortByDesc('total_sold')->sortByDesc('product_id');
         $storeName = str_replace(' ','',ucwords($store->name)) ;
         $categories = Category::all();
         return view('products.create', compact('categories', 'store', 'storeName', 'products'));

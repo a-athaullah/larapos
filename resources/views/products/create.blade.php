@@ -59,7 +59,7 @@
                                     </div>
                                     <div class="form-group"> 
                                         <label>Sell Price</label> 
-                                        <input type="number" min="1" name="price" class="form-control" required>
+                                        <input type="number" min="0" name="price" class="form-control" required>
                                     </div>
                                     <div class="form-group"> 
                                         <label>Description </label>
@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="form-group"> 
                                         <label>Cost</label> 
-                                        <input type="number" min="1" name="cost" class="form-control">
+                                        <input type="number" min="0" name="cost" class="form-control">
                                     </div>
                                     <div class="form-group" id="varians-input" style="margin-top:2em;"> 
                                         <label>Varians</label> 
@@ -146,10 +146,19 @@
                     </div>
                 </nav>
             </div>
-            <div class="col-md-8" style="margin-top:2em; padding-top:1em;">
+            <div class="col-md-8">
+                <input type="text" placeholder="Search" id="product-search" class=form-control style="margin-bottom:2em;margin-left:1em;width:1000px">
                 @foreach($products as $product)
-                <div class="col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="height:172px;float:left;margin-left:1em;margin-bottom:1em;"> 
-                    <h4 data-id="{{$product->category_id}}" data-name="{{$category->name}}" style="font-weight:bold;">{{ $product->name }}</h3>
+                <div class="btn-product-data-container col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="height:183px;float:left;margin-left:1em;margin-bottom:1em;"> 
+                    <h5 data-id="{{$product->category_id}}" data-name="{{$category->name}}" style="font-weight:bold;">{{ $product->name }}</h5>
+                    @php
+                        $varians=[];
+                        foreach ($product->varians as $data_varian) {
+                            array_push($varians, trim($data_varian->name));
+                        }
+                    @endphp
+                    <h6 class="prod-card-varian" style="margin-top:1em">{{ $varians ? implode(" | ", $varians) : $product->description}}</h6>
+                    <h6 class="prod-card-price" style="margin-top:1em;font-size:bold;bottom:0.3em;left:0;position:absolute;width:100%;border-top: 1px solid #fff;padding-top:0.3em">Rp {{ $product->price }},00</h6>
                     <div class="btn-product-data" style = "width:100%;height:100%;position:absolute;top:0;left:0;z-index:99;background-color:none;cursor:pointer"
                         data-id="{{$product->product_id}}" 
                         data-name="{{$product->name}}" 
@@ -168,6 +177,10 @@
             </div>
             <script>
                 const elementsProducts = document.querySelectorAll('.btn-product-data');
+                const elementsProductsContainer = document.querySelectorAll('.btn-product-data-container');
+
+                const searchProductInput = document.getElementById('product-search');
+                searchProductInput.addEventListener('keyup', searchProduct);
 
                 var addNewVarian = document.querySelector('#add-varian-input-create');
                 addNewVarian.addEventListener('click', addVarianInputCreate);
@@ -178,6 +191,25 @@
                 elementsProducts.forEach(elementsProduct => {
                     elementsProduct.addEventListener('click', selectProductData);
                 });
+
+                function searchProduct(e){
+                    e.preventDefault;
+                    var keyword = e.target.value.trim().toLowerCase()
+
+                    elementsProductsContainer.forEach(elementsProductCard => {
+                        //get data
+                        var dataset = elementsProductCard.querySelector('.btn-product-data').dataset;
+                        var prodName = dataset.name.trim().toLowerCase();
+                        var prodDesc = dataset.description.trim().toLowerCase();
+
+                        if (prodName.indexOf(keyword) == -1 && prodDesc.indexOf(keyword) == -1) {
+                            elementsProductCard.hidden = true;
+                        }else{
+                            elementsProductCard.hidden = false;
+                        }
+                    });
+
+                }
 
                 function selectProductData(e){
                     e.preventDefault();
