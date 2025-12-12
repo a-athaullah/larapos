@@ -17,6 +17,8 @@ class CreateCategoriesTable extends Migration
             $table->id('category_id');
             $table->string('name');
             $table->unsignedBigInteger('store_id')->default(1);
+            $table->foreign('store_id')->references('store_id')
+                ->on('stores')->onDelete('cascade');
             $table->timestamps();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';

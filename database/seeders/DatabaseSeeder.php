@@ -15,7 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+       
         // $this->call(UsersTableSeeder::class);
+        DB::table('payments')->insert([
+            'name' => 'Cash',
+        ]);
+        DB::table('payments')->insert([
+            'name' => 'QRIS',
+        ]);
         DB::table('stores')->insert([
             'name' => 'first store',
             'description' => 'first merchant',

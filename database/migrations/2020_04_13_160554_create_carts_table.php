@@ -14,6 +14,7 @@ class CreateCartsTable extends Migration
     public function up()
     {
         Schema::create('carts', function (Blueprint $table) {
+            $table->id('cart_id');
             $table->unsignedBigInteger('sale_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedInteger('amount');
@@ -21,9 +22,8 @@ class CreateCartsTable extends Migration
             $table->unsignedFloat('cost');
             $table->unsignedFloat('total_cost');
             $table->unsignedFloat('total_price');
-            $table->primary(['sale_id', 'product_id']);
-            $table->foreign('sale_id')->references('sale_id')->on('sales')
-                ->onDelete('cascade');
+            $table->string('varian')->nullable();
+            $table->foreign('sale_id')->references('sale_id')->on('sales')->onDelete('cascade');
             $table->foreign('product_id')->references('product_id')->on('products')->onDelete('cascade');
             $table->unsignedBigInteger('store_id')->default(1);
             $table->timestamps();

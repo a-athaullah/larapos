@@ -20,8 +20,10 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('store_id')->default(1);
+            $table->unsignedBigInteger('store_id');
             $table->boolean('administrator')->default(false);
+            $table->foreign('store_id')->references('store_id')
+                ->on('stores')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
             $table->engine = 'InnoDB';
