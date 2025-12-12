@@ -27,4 +27,8 @@ class Sale extends Model
         return $this->belongsTo('App\Store', 'store_id');
     }
 
+    public function payment() {
+        return $this->hasOne('App\Payment', 'payment_id');
+    }
+
 }
