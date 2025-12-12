@@ -21,7 +21,7 @@ class CreateProductsTable extends Migration
             $table->unsignedFloat('price');
             $table->unsignedFloat('cost')->nullable();
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('store_id')->default(1);
+            $table->unsignedBigInteger('store_id');
             $table->integer('total_sold')->default(0);
             $table->foreign('store_id')->references('store_id')
                 ->on('stores')->onDelete('cascade');
