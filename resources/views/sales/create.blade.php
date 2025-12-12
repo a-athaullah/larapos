@@ -44,28 +44,40 @@
                                     <div class="form-group"> 
                                         <label for="sales_notes">Notes</label> 
                                         <textarea id="sales_notes" name="notes" class= "form-control" placeholder="Put transaction notes here" style= "resize: none; line-height: 0.75;"></textarea>
-                                        <input type="hidden" id="user-id" value="{{ Auth::user()->id }}">
+                                        <input type="hidden" name="id" id="user-id" value="{{ Auth::user()->id }}">
                                         <input type="hidden" value="" name="total" id="sale-total">
+                                        <input type="hidden" value="" name="total_cost" id="sale-total-cost">
                                         <input type="hidden" value="{{ $store->store_id }}" name="store_id" id="sale-store-id">
+                                        <input type="hidden" value="" name="payment_id" id="sale-payment-id">
                                     </div>
                                     <div class="form-group">
                                         <table class="table" style="font-size:18px;">
                                             <thead>
                                                 <tr>
-                                                    <th>Qty</th>
+                                                    <th style="text-align:right;width:55px">Qty</th>
                                                     <th>Product</th>
-                                                    <th>Price</th>
-                                                    <th>Total</th>
+                                                    <th style="text-align:right;width:101px;">Price</th>
+                                                    <th style="text-align:right;width:101px;">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="cartTable"></tbody>
                                         </table>
+                                        <table class="table" style="font-size:18px;">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th style="text-align:right;width:101px;">Total</th>
+                                                    <th id="cartTotal" style="text-align:right;width:101px;">0</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
                                     </div>
-                                    <div class="form-group text-right">
-                                        <h5>TOTAL Rp.<span id="cartTotal" class="text-bold">0</span></h5>
-                                    </div> @csrf 
-                                    <button type="submit" class="btn btn-dark btn-block btn-lg">Transaction</button> 
-                                    
+                                    @csrf 
+                                    <button type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="save_only">Save Transaction</button> 
+                                    <button type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="save_pay">Save & Pay</button> 
+                                    <button type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="pay_serve">Pay & Serve</button> 
                                 </form>
                             </div>
                         </div>
@@ -98,7 +110,7 @@
                                     <h6 class="prod-card-varian" style="margin-top:1em">{{ $varians ? implode(" | ", $varians) : "-"}}</h6>
                                     <h6 class="prod-card-price" style="margin-top:1em;font-size:bold;bottom:0.3em;left:0;position:absolute;width:100%;border-top: 1px solid #fff;padding-top:0.3em">Rp {{ $product->price }},-</h6>
                                     <div class="btn-product-data" style = "width:100%;height:100%;position:absolute;top:0;left:0;z-index:10;background-color:none;cursor:pointer"
-                                        data-id="{{$product->product_id}}" 
+                                        data-product_id="{{$product->product_id}}" 
                                         data-name="{{$product->name}}" 
                                         data-price = "{{$product->price }}"
                                         data-cost = "{{$product->cost }}"
@@ -118,7 +130,9 @@
                             test
                         </div>
                         <div class="tab-pane fade" id="nav-show-report" role="tabpanel" aria-labelledby="nav-show-report">
-                            Report
+                            Report <br>
+                            Revenue : {{ $revenue }}<br>
+                            Profit : {{ $profit }}
                         </div>
                     </div>
                 </nav>
@@ -128,18 +142,13 @@
 </div> 
 
 <!-- Add Product Modal -->
-<!-- Button trigger modal -->
-<button id="add-product-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-product-modal" style="display:none">
-  Add product to charts
-</button>
-
 <!-- Modal -->
-<div class="modal fade" id="add-product-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="add-product-modal" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="add-product-modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close close-product-modal-button" data-bs-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -170,7 +179,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary close-product-modal-button">Close</button>
         <button type="button" class="btn btn-dark" id="save-product-modal-button">Add Product</button>
       </div>
     </div>
@@ -179,10 +188,14 @@
 <script>
     const elementsProductsContainer = document.querySelectorAll('.btn-product-data-container');
     const elementsProducts = document.querySelectorAll('.btn-product-data');
+    const addProductModalClose = document.querySelectorAll('.close-product-modal-button');
     const modalQtySubs = document.querySelector('#product-modal-amount-subs');
     const modalQtyAdd = document.querySelector('#product-modal-amount-add');
     const searchProductInput = document.getElementById('product-search');
     const addProdToCartButton = document.getElementById('save-product-modal-button');
+    const addProductModal = document.getElementById('add-product-modal');
+
+    const addTransactionForm = document.getElementById('createSaleForm');
 
     modalQtySubs.addEventListener('click', subsModalQty)
     modalQtyAdd.addEventListener('click', addModalQty);;
@@ -191,8 +204,19 @@
                                         
     elementsProducts.forEach(elementsProduct => {
         elementsProduct.addEventListener('click', selectProductData);
-    });                                       
+    });
+    addProductModalClose.forEach(elements => {
+        elements.addEventListener('click', closeProductModal);
+    });                                         
     
+    function closeProductModal(e){
+        document.activeElement.blur();
+        const modalInstance = bootstrap.Modal.getInstance(addProductModal);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    }
+
     function subsModalQty(e) {
         var currentVal = parseInt($('#add-product-modal-amount').val());
         
@@ -224,9 +248,9 @@
         $('#add-product-desc').html(product.description); 
 
         $('#product-varian-container').empty();
+
         varians.forEach((varian,index)=>{
-            // <input type="radio" class="btn-check" name="prod-varian-radio" id="option5" autocomplete="off" checked>
-            //     <label class="btn btn-outline-dark" for="option5">Es</label>
+
             var inputElement = document.createElement('input');
             inputElement.setAttribute('type','radio');
             inputElement.setAttribute('class','btn-check');
@@ -245,9 +269,10 @@
             labelElement.textContent = varian.name;
             
             $('#product-varian-container').append(labelElement);
-            $('#save-product-modal-button').data('product',JSON.stringify(product));
         });
-        $('#add-product-modal-button').click();
+        $('#save-product-modal-button').data('product',JSON.stringify(product));
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(addProductModal);
+        modalInstance.show();
     }
 
     function searchProduct(e){
@@ -270,41 +295,190 @@
 
     function addProductModalToCart(){
         var product = JSON.parse($('#save-product-modal-button').data('product'));
-        var selectedVar = $('#product-varian-container input:radio:checked').val();
+        var selectedVar = "";
+        if($('#product-varian-container input:radio:checked').length > 0){
+            selectedVar = $('#product-varian-container input:radio:checked').val();
+        }
         var quantity = parseInt($('#add-product-modal-amount').val());
         var totalProdOnCart = $(".cart-row-prod").length;
         var totalPrice = quantity * parseInt(product.price);
 
-        var rowId = "cart_row_"+product.product_id+"_"+selectedVar;
+        var selectedVarId = selectedVar.replace(/[^a-zA-Z0-9]/g, '');
+
+        var productName = (selectedVar == "") ? product.name : product.name+"<br>("+selectedVar+")";
+        var itemCount = $('.cart-row-prod').length;
+        var rowId = "cart_row_"+product.product_id+"_"+selectedVarId;
 
         if ($("#"+rowId).length == 0){
             var newElementRow = document.createElement('tr');
             newElementRow.setAttribute('id',rowId);
             newElementRow.setAttribute('class','cart-row-prod');
+            newElementRow.setAttribute('style','cursor:pointer;z-index:10;');
+            newElementRow.setAttribute('data-index',itemCount);
+            newElementRow.addEventListener('click',reduceProductQuantity);
 
             $('#cartTable').append(newElementRow);
             //Quantity to show
             var newElementQty = document.createElement('td');
+            newElementQty.setAttribute('class','cart-qty-text-col');
+            newElementQty.style.cssText = 'text-align:right;';
             newElementQty.textContent = quantity;
             
             //Product to show
             var newElementProd = document.createElement('td');
-            newElementProd.innerHTML = product.name+"<br>("+selectedVar+")";
+            newElementProd.innerHTML = productName;
 
             //Price to show
             var newElementPrice = document.createElement('td');
-            newElementPrice.textContent = "Rp. "+product.price+",-";
+            newElementPrice.style.cssText = 'text-align:right;';
+            newElementPrice.textContent = product.price+",-";
 
             //Price to show
             var newElementTotal = document.createElement('td');
-            newElementTotal.textContent = "Rp. "+totalPrice+",-";
+            newElementTotal.setAttribute('class','cart-total-text-col');
+            newElementTotal.style.cssText = 'text-align:right;';
+            newElementTotal.textContent = totalPrice+",-";
 
             newElementRow.appendChild(newElementQty);
             newElementRow.appendChild(newElementProd);
             newElementRow.appendChild(newElementPrice);
             newElementRow.appendChild(newElementTotal);
 
-            
+            //cart data to submit
+            var prefixId = "carts["+itemCount+"]";
+
+            var inputProduct = document.createElement('input');
+            inputProduct.setAttribute('name',prefixId+"[product_id]");
+            inputProduct.setAttribute('type','hidden');
+            inputProduct.value = product.product_id;
+
+            var inputAmount = document.createElement('input');
+            inputAmount.setAttribute('name',prefixId+"[amount]");
+            inputAmount.setAttribute('type','hidden');
+            inputAmount.setAttribute('class','cart-qty-col');
+            inputAmount.value = quantity;
+
+            var inputPrice = document.createElement('input');
+            inputPrice.setAttribute('name',prefixId+"[price]");
+            inputPrice.setAttribute('type','hidden');
+            inputPrice.setAttribute('class','cart-prc-col');
+            inputPrice.value = product.price;
+
+            var inputCost = document.createElement('input');
+            inputCost.setAttribute('name',prefixId+"[cost]");
+            inputCost.setAttribute('class','cart-cost-col');
+            inputCost.setAttribute('type','hidden');
+            inputCost.value = product.cost;
+
+            var inputTotalCost = document.createElement('input');
+            inputTotalCost.setAttribute('name',prefixId+"[total_cost]");
+            inputTotalCost.setAttribute('class','cart-tcost-col');
+            inputTotalCost.setAttribute('type','hidden');
+            inputTotalCost.value = parseInt(product.cost) * quantity;
+
+            var inputTotalPrice = document.createElement('input');
+            inputTotalPrice.setAttribute('name',prefixId+"[total_price]");
+            inputTotalPrice.setAttribute('type','hidden');
+            inputTotalPrice.setAttribute('class','cart-total-col');
+            inputTotalPrice.value = totalPrice;
+
+            var inputStore = document.createElement('input');
+            inputStore.setAttribute('name',prefixId+"[store_id]");
+            inputStore.setAttribute('type','hidden');
+            inputStore.value = product.store_id;
+
+            var inputVarian = document.createElement('input');
+            inputVarian.setAttribute('name',prefixId+"[varian]");
+            inputVarian.setAttribute('type','hidden');
+            inputVarian.value = selectedVar;
+
+            newElementRow.appendChild(inputProduct);
+            newElementRow.appendChild(inputAmount);
+            newElementRow.appendChild(inputPrice);
+            newElementRow.appendChild(inputCost);
+            newElementRow.appendChild(inputTotalCost);
+            newElementRow.appendChild(inputTotalPrice);
+            newElementRow.appendChild(inputStore);
+            newElementRow.appendChild(inputVarian);
+
+            recalculateCartTotal();
+        }else{
+            var targetRow = document.getElementById(rowId);
+            var inputAmount = targetRow.querySelector(".cart-qty-col");
+            var colAmount = targetRow.querySelector(".cart-qty-text-col");
+
+            var newAmount = parseInt(inputAmount.value) + quantity;
+
+            inputAmount.value = newAmount;
+            colAmount.textContent = newAmount;
+
+            recalculateCartRow(rowId);
         }
+
+        document.activeElement.blur();
+        const modalInstance = bootstrap.Modal.getInstance(addProductModal);
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+    }
+    function reduceProductQuantity(e){
+        var targetRow = e.target.parentElement;
+        var rowId = targetRow.id;
+
+        var inputAmount = targetRow.querySelector(".cart-qty-col");
+        var colAmount = targetRow.querySelector(".cart-qty-text-col");
+
+        var quantity = parseInt(inputAmount.value);
+
+        if (quantity > 1) {
+            var newAmount = quantity - 1;
+            inputAmount.value = newAmount;
+            colAmount.textContent = newAmount;
+
+            recalculateCartRow(rowId);
+        } else {
+            targetRow.remove();
+            recalculateCartTotal();
+        }
+    }
+
+    function recalculateCartTotal(){
+        var total = 0;
+        var totalCost = 0;
+        var elementsTotal = document.querySelectorAll('.cart-total-col');
+        var elementsTotalCost = document.querySelectorAll('.cart-tcost-col');
+
+        elementsTotal.forEach(element => {
+            total += parseInt(element.value);
+        }); 
+        elementsTotalCost.forEach(element => {
+            totalCost += parseInt(element.value);
+        });     
+    
+
+        $('#cartTotal').html(total+",-");
+        $('#sale-total').val(total);
+        $('#sale-total-cost').val(totalCost);
+    }
+    function recalculateCartRow(rowId){
+        var elementsRow = document.querySelector('#'+rowId);
+
+        var inputAmount = elementsRow.querySelector(".cart-qty-col");
+        var inputPrice  = elementsRow.querySelector(".cart-prc-col");
+        var inputCost = elementsRow.querySelector('.cart-cost-col');
+        var inputTotalPrice  = elementsRow.querySelector(".cart-total-col");
+        var inputTotalCost  = elementsRow.querySelector(".cart-tcost-col");
+        var colTotalPrice  = elementsRow.querySelector(".cart-total-text-col");
+
+        var amount = parseInt(inputAmount.value);
+        var price = parseInt(inputPrice.value);
+        var total = amount * price;
+        var cost = parseInt(inputCost.value);
+        var totalCost = amount * cost;
+
+        inputTotalPrice.value = total;
+        inputTotalCost.value = totalCost;
+        colTotalPrice.textContent = total + ",-";
+        recalculateCartTotal();
     }
 </script>@endsection

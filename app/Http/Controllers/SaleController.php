@@ -27,16 +27,14 @@ class SaleController extends Controller
         $products = $store->products->sortByDesc('total_sold')->sortByDesc('product_id');
 
         $sales = $store->sales()->whereDate('created_at', Carbon::today())->get();
+        //Total of sales today
+        $totalSalesPerDay = 0;
 
         $revenue = 0;
         $profit = 0;
         foreach ($sales as $sale) {
             $revenue += $sale->total;
-            $cost=0;
-            foreach ($sale->carts as $cart) {
-                $cost += $cart->total_cost;
-            }
-            $profit += $sale->total - $cost;
+            $profit += ($sale->total - $sale->total_cost);
         }
         
         return view(
@@ -60,17 +58,14 @@ class SaleController extends Controller
         $products = Product::orderBy('name', 'DESC')->get();
         //Total of sales today
         $totalSalesPerDay = 0;
-        $salesToday = Sale::select('total')->where('created', date('Y-m-d'))
-            ->get();
+        // $salesToday = Sale::select('total')->where('created', date('Y-m-d'))
+        //     ->get();
 
         foreach ($salesToday as $sale) {
             $totalSalesPerDay += $sale->total;
         }
 
-        return view(
-            'sales.create',
-            compact('store', 'storeName','products', 'totalSalesPerDay')
-        );
+        return view('sales.create');
     }
 
     /*
@@ -78,34 +73,61 @@ class SaleController extends Controller
      */
     public function store(SaleRequest $request)
     {
-        $sale = Sale::create(
-            [
-                'total'   => $request->input('total'),
-                'notes'     => $request->input('notes'),
-                'id'      => $request->input('id'),
-                'created' => date('Y-m-d')
-            ]
-        );
-
-        if (isset($sale)) {
-            $productsArray = (array)json_decode($request->input('products'));
-            $completed = [];
-            //Get the products sales
-            foreach ($productsArray as $index) {
-                $cart = new Cart();
-                $cart->sale_id = $sale->sale_id;
-                $cart->product_id = $index->id;
-                $cart->amount = $index->amount;
-                $cart->created = date('Y-m-d');
-                $cart->save();
-                $completed[] = $cart;
-            }
-
-            if (count($productsArray) === count($completed)) {
-                return new Response($completed, 201);
+        //Get the store information
+        $store = Store::where('store_id', Auth::user()->store_id)->first();
+        $errors = [];
+        $success = [];
+        $data = [
+            'total' => $request->total,
+            'store_id' => $request->store_id,
+            'notes' => trim($request->notes),
+            'total_cost' => $request->total_cost,
+            'store_id' => $store->store_id,
+            'id' => $request->id,
+        ];
+        $carts = [];
+        if($request->carts){
+            $carts = $request->carts;
+            switch ($request->action) {
+                case "save_only":
+                    $newSale =$store->sales()->create($data);
+                    $newSale->carts()->createMany($carts);
+                    array_push($success, "Success store transaction");
+                    break;
+                case "save_pay":
+                    dd($request);
+                    if ($selectedProduct = $store->products->find($request['product_id'])){
+                        $selectedProduct->varians()->delete();
+                        $selectedProduct->update($data);
+                        if ($varians){
+                            $selectedProduct->varians()->createMany($varians);
+                        }
+                        array_push($success, "Success updating category");
+                    }else{
+                        array_push($errors, "Category not found");
+                    }
+                    break;
+                case "pay_serve":
+                    dd($request);
+                    if ($selectedProduct = $store->products->find($request['product_id'])){
+                        $selectedProduct->delete();
+                        array_push($success, "Success deleting category");
+                    }else{
+                        array_push($errors, "Category not found");
+                    }
+                    break;
+                default:
+                    array_push($errors, "Forbidden action");;
+                    break;
             }
         }
-        return new Response('Cart was not filled', 500);
+        else{
+            array_push($errors, "carts can not be mepty");
+        }
+
+        
+       
+        return back()->with('created', $success)->with('errors',$errors);
     }
 
     /*
