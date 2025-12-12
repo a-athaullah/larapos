@@ -24,8 +24,6 @@ class SaleRequest extends FormRequest
     public function rules()
     {
         return [
-            'rfc' => ['required', 'string'],
-            'products' => ['required', 'json'],
             'total' => ['required', 'numeric', 'min:1']
         ];
     }
