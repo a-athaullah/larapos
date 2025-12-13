@@ -13,7 +13,7 @@ class Sale extends Model
     public $incrementing = true;
 
     protected $fillable = [
-        'total', 'total_cost','store_id', 'id', 'created'
+        'total', 'total_cost','store_id', 'notes','id', 'created', 'is_paid', 'is_served','payment_id'
     ];
 
 
@@ -28,7 +28,10 @@ class Sale extends Model
     }
 
     public function payment() {
-        return $this->hasOne('App\Payment', 'payment_id');
+        return $this->belongsTo('App\Payment', 'payment_id');
     }
 
+    public function user() {
+        return $this->belongsTo('App\User', 'id');
+    }
 }

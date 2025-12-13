@@ -25,6 +25,7 @@ class Cart extends Model
         'cost',
         'total_cost',
         'total_price',
+        'varian',
         'store_id', 
         'created'
     ];
@@ -35,7 +36,7 @@ class Cart extends Model
     }
 
     //This model can have one or many products
-    public function products() {
-        return $this->hasOne('App\Product', 'product_id');
+    public function product() {
+        return $this->belongsTo('App\Product', 'product_id');
     }
 }
