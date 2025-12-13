@@ -91,7 +91,7 @@
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <button class="nav-link active" id="show-product-tab" data-bs-toggle="tab" data-bs-target="#nav-show-products" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Products</button>
-                        <button class="nav-link" id="show-sale-tab" data-bs-toggle="tab" data-bs-target="#nav-show-sale" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Today Sales</button>
+                        <button class="nav-link" id="show-sale-tab" data-bs-toggle="tab" data-bs-target="#nav-show-sale" type="button" role="tab" aria-controls="nav-profile" aria-selected="false" id="today-sales-tab">Today Sales</button>
                         <button class="nav-link" id="show-sale-tab" data-bs-toggle="tab" data-bs-target="#nav-show-report" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Today`s Report</button>
                     </div>
                     <div class="tab-content" id="nav-tabContentRight" style="padding-top:1em">
@@ -127,12 +127,95 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="nav-show-sale" role="tabpanel" aria-labelledby="nav-show-sale">
-                            test
+                            
+                            <div style="width:100%;overflow-y:auto;height:590px">
+                                @foreach($sales as $sale)
+                                <div class="btn-sale-data-container col-md-3 p-2 p-md-3 bg-dark rounded text-light text-center" style="height:452px;float:left;margin-left:1em;margin-bottom:1em;"> 
+                                    <div style="width:100%">
+                                        <h6 style="font-weight:bold;text-align:left;width:50%;float:left;">#{{ $sale->sale_id }}</h6>
+                                        <h6 style="font-weight:bold;text-align:right;width:50%;float:right">{{ $sale->user->name }}</h6>
+                                    </div>
+                                    @php
+                                        $notes = $sale->notes;
+                                        $notes = (strlen($notes) > 50) ? substr($notes, 0, 50) . '...': $notes;
+                                    @endphp
+                                    <div style="width:100%;margin-top:1.5em;height:48px;padding:2px 7px;vertical-align:top;" class="bg-secondary rounded">
+                                        <h6 class="sale-card-notes" style="text-align:left;">{{ $notes }}</h6>
+                                    </div>
+                                    <div style="width:100%;margin-top:0.5em;height:170px;padding:2px 7px;vertical-align:top;overflow-y:auto" class="bg-secondary rounded">
+                                        <table style="font-size:14px">
+                                            <thead>
+                                                <tr><th style="width:25px"></th><th></th></tr>
+                                            </thead>
+                                            <tbody style="overflow-y:auto">
+                                                @foreach($sale->carts as $cart)
+                                                <tr>
+                                                    <td style="text-align:right;vertical-align:top;">{{$cart->amount}}</td>
+                                                    <td style="text-align:left;padding-left:8px">{{$cart->varian ? $cart->product->name." (".$cart->varian.")" : $cart->product->name}}</td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div style="width:100%;margin-top:0.5em;height:29px;padding:2px 7px;vertical-align:top;" class="bg-secondary rounded">
+                                        <table style="font-size:14px;width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:25px">{{ $sale->payment ? $sale->payment->name : "-"}}</th>
+                                                    <th style="text-align:right">Rp. {{ number_format($sale->total, 0, '.', '.') }},-</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    <form method="post" action="{{ route('sales.store') }}" id="updateSaleFormStatus">
+                                        @csrf 
+                                        <input type="hidden" value="{{$sale->sale_id}}" name="sale_id">
+                                       <button style="margin-top:1em;" type="submit" class="btn btn-light btn-block btn-sm" name="action" value="pay_old" {{ $sale->is_paid ? "disabled" : ""}}>
+                                            @if($sale->is_paid)
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
+                                                <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
+                                                <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0"/>
+                                            </svg>
+                                            @endif
+                                            Pay
+                                        </button>
+                                        <button type="submit" class="btn btn-light btn-block btn-sm" name="action" value="serve_old" {{ $sale->is_served ? "disabled" : ""}}>
+                                            @if($sale->is_served)
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
+                                                <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
+                                                <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0"/>
+                                            </svg>
+                                            @endif
+                                            Serve
+                                        </button>
+                                        <button data-sale="{{ json_encode($sale) }}" data-carts="json_encode($sale->carts)" id="edit-old-sale-btn" class="btn btn-light btn-block btn-sm">Edit</button>    
+                                    </form>
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
                         <div class="tab-pane fade" id="nav-show-report" role="tabpanel" aria-labelledby="nav-show-report">
-                            Report <br>
-                            Revenue : {{ $revenue }}<br>
-                            Profit : {{ $profit }}
+                            <h4 >Report</h4> 
+                            <b>Revenue</b> : {{ $revenue }}<br>
+                            @php
+                                $revDetail = [];
+                                foreach ($payments as $payment) {
+                                    $revDetail[$payment->name] = 0;
+                                }
+                                $revDetail['unpaid'] = 0;
+                                foreach ($sales as $sale) {
+                                    if ($sale->payment) {
+                                        $revDetail[$sale->payment->name] += $sale->total;
+                                    }else{
+                                        $revDetail['unpaid'] += $sale->total;
+                                    }
+                                }
+                            @endphp
+                            @foreach($revDetail as $rindex => $rdetail)
+                            <b>Revenue {{ $rindex }}</b> : {{ $rdetail }} <br>
+                            @endforeach    
+                            <br>
+                            <b>Profit</b> : {{ $profit }}<br>
                         </div>
                     </div>
                 </nav>
@@ -166,16 +249,7 @@
         </div>
         <div class="row" id="add-product-varian" style="justify-content: center;">
             <label style="text-align:center;">Varian:</label>
-            <div id="product-varian-container" style="justify-content:center;width:auto;">
-                <input type="radio" class="btn-check" name="prod-varian-radio" id="option5" autocomplete="off" checked>
-                <label class="btn btn-outline-dark" for="option5">Es</label>
-
-                <input type="radio" class="btn-check" name="prod-varian-radio" id="option6" autocomplete="off">
-                <label class="btn btn-outline-dark" for="option6">Anget</label>
-
-                <input type="radio" class="btn-check" name="prod-varian-radio" id="option8" autocomplete="off">
-                <label class="btn btn-outline-dark" for="option8">Biasa</label>                  
-            </div>
+            <div id="product-varian-container" style="justify-content:center;width:auto;"></div>
         </div>
       </div>
       <div class="modal-footer">

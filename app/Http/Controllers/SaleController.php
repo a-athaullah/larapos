@@ -7,6 +7,7 @@ use App\Http\Requests\SaleRequest;
 use App\Product;
 use App\Sale;
 use App\Store;
+use App\Payment;
 use App\Exports\SalesExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Response;
@@ -30,6 +31,9 @@ class SaleController extends Controller
         //Total of sales today
         $totalSalesPerDay = 0;
 
+        //get all Payment
+        $payments = Payment::all();
+
         $revenue = 0;
         $profit = 0;
         foreach ($sales as $sale) {
@@ -39,7 +43,7 @@ class SaleController extends Controller
         
         return view(
             'sales.create',
-            compact('store', 'storeName','products', 'sales', 'revenue', 'profit')
+            compact('store', 'storeName','products', 'sales', 'revenue', 'profit','payments')
         );
     }
 
@@ -50,20 +54,7 @@ class SaleController extends Controller
      */
     public function create()
     {
-        //Get the store information
-        $store = Store::where('store_id', Auth::user()->store_id)->first();
-        $storeName = str_replace(' ','',ucwords($store->name)) ;
-        // $clients = Client::orderBy('rfc', 'DESC')->get();
-        //Get the products information
-        $products = Product::orderBy('name', 'DESC')->get();
-        //Total of sales today
-        $totalSalesPerDay = 0;
-        // $salesToday = Sale::select('total')->where('created', date('Y-m-d'))
-        //     ->get();
 
-        foreach ($salesToday as $sale) {
-            $totalSalesPerDay += $sale->total;
-        }
 
         return view('sales.create');
     }
@@ -74,59 +65,75 @@ class SaleController extends Controller
     public function store(SaleRequest $request)
     {
         //Get the store information
+        $userId = Auth::user()->id;
         $store = Store::where('store_id', Auth::user()->store_id)->first();
         $errors = [];
         $success = [];
-        $data = [
-            'total' => $request->total,
-            'store_id' => $request->store_id,
-            'notes' => trim($request->notes),
-            'total_cost' => $request->total_cost,
-            'store_id' => $store->store_id,
-            'id' => $request->id,
-        ];
+        $data = [];
+        if($request->action != "pay_old" && $request->action != "serve_old"){
+            $data = [
+                'total' => $request->total,
+                'store_id' => $request->store_id,
+                'notes' => trim($request->notes),
+                'total_cost' => $request->total_cost,
+                'store_id' => $store->store_id,
+                'id' => $userId,
+            ];
+        }
         $carts = [];
-        if($request->carts){
-            $carts = $request->carts;
-            switch ($request->action) {
-                case "save_only":
+        $carts = $request->carts;
+        switch ($request->action) {
+            case "save_only":
+                if ($request->carts){
                     $newSale =$store->sales()->create($data);
                     $newSale->carts()->createMany($carts);
                     array_push($success, "Success store transaction");
-                    break;
-                case "save_pay":
-                    dd($request);
-                    if ($selectedProduct = $store->products->find($request['product_id'])){
-                        $selectedProduct->varians()->delete();
-                        $selectedProduct->update($data);
-                        if ($varians){
-                            $selectedProduct->varians()->createMany($varians);
-                        }
-                        array_push($success, "Success updating category");
-                    }else{
-                        array_push($errors, "Category not found");
+                }else{
+                    array_push($errors, "carts can not be mepty");
+                }
+                break;
+            case "pay_old":
+                $sale_id = $request->sale_id;
+                $sale = $store->sales()->find($sale_id);
+                $sale->payment_id = 1;
+                $sale->is_paid=true;
+                $sale->id = $userId;
+                $sale->save();
+                array_push($success, "Success set order to paid");
+                break;
+            case "serve_old":
+                $sale_id = $request->sale_id;
+                $sale = $store->sales()->find($sale_id);
+                $sale->is_served=true;
+                $sale->id = $userId;
+                $sale->save();
+                array_push($success, "Success serve order");
+                break;
+            case "save_pay":
+                if ($selectedProduct = $store->products->find($request['product_id'])){
+                    $selectedProduct->varians()->delete();
+                    $selectedProduct->update($data);
+                    if ($varians){
+                        $selectedProduct->varians()->createMany($varians);
                     }
-                    break;
-                case "pay_serve":
-                    dd($request);
-                    if ($selectedProduct = $store->products->find($request['product_id'])){
-                        $selectedProduct->delete();
-                        array_push($success, "Success deleting category");
-                    }else{
-                        array_push($errors, "Category not found");
-                    }
-                    break;
-                default:
-                    array_push($errors, "Forbidden action");;
-                    break;
-            }
+                    array_push($success, "Success updating category");
+                }else{
+                    array_push($errors, "Category not found");
+                }
+                break;
+            case "pay_serve":
+                dd($request);
+                if ($selectedProduct = $store->products->find($request['product_id'])){
+                    $selectedProduct->delete();
+                    array_push($success, "Success deleting category");
+                }else{
+                    array_push($errors, "Category not found");
+                }
+                break;
+            default:
+                array_push($errors, "Forbidden action");;
+                break;
         }
-        else{
-            array_push($errors, "carts can not be mepty");
-        }
-
-        
-       
         return back()->with('created', $success)->with('errors',$errors);
     }
 
