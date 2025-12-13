@@ -23,8 +23,6 @@ class SaleRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'total' => ['required', 'numeric', 'min:1']
-        ];
+        return [];
     }
 }
