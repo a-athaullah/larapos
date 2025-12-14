@@ -86,7 +86,7 @@
             </div>
             <div class="col-md-8" style="margin-top:2em; padding-top:1em;">
                 @foreach($categories as $category)
-                <div data-id="{{$category->category_id}}" data-name="{{$category->name}}" class="btn-category-data col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="cursor:pointer;height:172px;"> 
+                <div data-id="{{$category->category_id}}" data-name="{{$category->name}}" class="btn-category-data col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="cursor:pointer;height:172px;float:left;margin:0.5em;"> 
                     <h4 data-id="{{$category->category_id}}" data-name="{{$category->name}}" style="font-weight:bold;">{{ $category->name }}</h3>
                 </div>
                 @endforeach
