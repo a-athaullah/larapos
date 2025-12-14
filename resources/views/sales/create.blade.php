@@ -75,9 +75,9 @@
                                         </table>
                                     </div>
                                     @csrf 
-                                    <button type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="save_only">Save Transaction</button> 
-                                    <button type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="save_pay">Save & Pay</button> 
-                                    <button type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="pay_serve">Pay & Serve</button> 
+                                    <button style="width:100%" type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="save_only">Save Transaction</button> 
+                                    <button style="width:100%;margin-top:5px" type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="save_pay">Save & Pay</button> 
+                                    <button style="width:100%;margin-top:5px" type="submit" class="btn btn-dark btn-block btn-lg" name="action" value="pay_serve">Pay & Serve</button> 
                                 </form>
                             </div>
                         </div>
@@ -170,7 +170,7 @@
                                     <form method="post" action="{{ route('sales.store') }}" id="updateSaleFormStatus">
                                         @csrf 
                                         <input type="hidden" value="{{$sale->sale_id}}" name="sale_id">
-                                       <button style="margin-top:1em;" type="submit" class="btn btn-light btn-block btn-sm" name="action" value="pay_old" {{ $sale->is_paid ? "disabled" : ""}}>
+                                       <button style="margin-top:1em;width:100%" type="submit" class="btn btn-light btn-block btn-sm" name="action" value="pay_old" {{ $sale->is_paid ? "disabled" : ""}}>
                                             @if($sale->is_paid)
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
                                                 <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
@@ -179,7 +179,7 @@
                                             @endif
                                             Pay
                                         </button>
-                                        <button type="submit" class="btn btn-light btn-block btn-sm" name="action" value="serve_old" {{ $sale->is_served ? "disabled" : ""}}>
+                                        <button style="margin-top:4px;width:100%" type="submit" class="btn btn-light btn-block btn-sm" name="action" value="serve_old" {{ $sale->is_served ? "disabled" : ""}}>
                                             @if($sale->is_served)
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
                                                 <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
@@ -188,7 +188,7 @@
                                             @endif
                                             Serve
                                         </button>
-                                        <button data-sale="{{ json_encode($sale) }}" data-carts="json_encode($sale->carts)" id="edit-old-sale-btn" class="btn btn-light btn-block btn-sm">Edit</button>    
+                                        <button style="margin-top:4x;width:100%" data-sale="{{ json_encode($sale) }}" data-carts="json_encode($sale->carts)" id="edit-old-sale-btn" class="btn btn-light btn-block btn-sm">Edit</button>    
                                     </form>
                                 </div>
                                 @endforeach
