@@ -149,7 +149,7 @@
             <div class="col-md-8">
                 <input type="text" placeholder="Search" id="product-search" class=form-control style="margin-bottom:2em;margin-left:1em;width:1000px">
                 @foreach($products as $product)
-                <div class="btn-product-data-container col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="height:183px;float:left;margin-left:1em;margin-bottom:1em;"> 
+                <div class="btn-product-data-container col-md-2 p-2 p-md-3 bg-dark rounded text-light text-center" style="height:183px;float:left;margin-left:1em;margin-bottom:1em;position:relative;"> 
                     <h5 data-id="{{$product->category_id}}" data-name="{{$product->category->name}}" style="font-weight:bold;">{{ $product->name }}</h5>
                     @php
                         $varians=[];
