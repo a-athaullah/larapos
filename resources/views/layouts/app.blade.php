@@ -28,23 +28,20 @@
     </style>
 </head>
 
-<body class="bg-light" x-data='{ct: "Categories", pd: "Products", ads: "Add User", acs: "Add Customer", dbps: "Databased Products", acg: "Add Categories", cnpdt: " Create New Product", apd: "Add Products", title: "Mayess", nav1: "Home", cc: "Create Categories", nav2: "Doc", cn: "Category Name", nav3: "Data", cnct: "Create New Categories", sv: "Save Data", ctndb: "Categories databased", nav4: "Transaction", ncsa: "New Customer", inc: "Income", nav5: "Report", pro: "PRO", rpt: "Report", rptdm: "Report details menu", nav6: "WebApp", xpr: "Export Report", pap: "Premium App", db: "Database",dbs: "Register Database in here", pfc: "Profit Income", us: "User", gpr: "Group Report", pdpr: "Product Report", cs: "Customer", nus: "Create new user", usdb: "User Databased Management", usb: "User Report", cdmb: "Customer Databased Management", csr: "Customer Report"}'>
+<body class="bg-light">
     <div class="wrapper">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white"> 
             <a class="navbar-brand" href="/" style="margin-left:1em;">{{ $storeName }}</a> 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto p-1">
                     <li class="nav-item active"> 
-                        <a href="{{route('data')}}" class="nav-link" x-text="nav3"></a> 
+                        <a href="{{route('categories.index')}}" class="nav-link" x-text="ct">Categories</a> 
                     </li>
                     <li class="nav-item active"> 
-                        <a href="{{route('categories.index')}}" class="nav-link" x-text="ct"></a> 
+                        <a href="{{route('products.index')}}" class="nav-link" x-text="pd">Products</a> 
                     </li>
                     <li class="nav-item active"> 
-                        <a href="{{route('products.index')}}" class="nav-link" x-text="pd"></a> 
-                    </li>
-                    <li class="nav-item active"> 
-                        <a href="{{route('sales.index')}}" class="nav-link" x-text="nav4"></a> 
+                        <a href="{{route('sales.index')}}" class="nav-link" x-text="nav4">Transactions</a> 
                     </li>
                     <li class="nav-item active">
                         <form action="{{route('logout')}}" method="POST">
